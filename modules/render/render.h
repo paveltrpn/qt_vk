@@ -9,8 +9,6 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
-#include "uv.h"
-
 #include "timer.h"
 
 namespace tire {
@@ -43,6 +41,8 @@ protected:
     virtual void postFrame() = 0;
     virtual void swapBuffers() = 0;
     virtual void postLoop() = 0;
+
+    void loop();
 
     virtual void setSwapInterval( int interval ) = 0;
 
@@ -81,9 +81,6 @@ protected:
 
 private:
     void configureX11();
-
-private:
-    static void loop( uv_timer_t *handle );
 };
 
 }  // namespace tire

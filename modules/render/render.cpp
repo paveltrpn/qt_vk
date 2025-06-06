@@ -145,25 +145,22 @@ void Render::configureX11() {
     }
 }
 
-void Render::loop( uv_timer_t *handle ) {
-    // Retrive "this" pointer previously saved in uv_handle_t->data member
-    auto self = static_cast<Render *>( handle->data );
-
+void Render::loop() {
     // XLib event loop
-    while ( XPending( self->display_ ) ) {
+    while ( XPending( display_ ) ) {
         XEvent event;
-        XNextEvent( self->display_, &event );
+        XNextEvent( display_, &event );
         if ( event.type == KeyPress ) {
             auto keyEventCode = event.xkey.keycode;
 
             // Handle key press
-            self->keyPressEvent( event.xkey.keycode );
+            keyPressEvent( event.xkey.keycode );
 
             // Handle escape button here for convinient access to uv timer handle
             switch ( keyEventCode ) {
                 case 9: {  // == ESCAPE
                     // stop render loop
-                    self->run_ = false;
+                    run_ = false;
                     break;
                 }
                 default: {
@@ -173,34 +170,34 @@ void Render::loop( uv_timer_t *handle ) {
             // Force immidiate output to stdout
             std::cout << std::flush;
         } else if ( event.type == KeyRelease ) {
-            self->keyReleaseEvent( event.xkey.keycode );
+            keyReleaseEvent( event.xkey.keycode );
         } else if ( event.type == ButtonPress ) {
-            self->mouseButtonPressEvent( event.xbutton.button );
+            mouseButtonPressEvent( event.xbutton.button );
         } else if ( event.type == ButtonRelease ) {
-            self->mouseButtonReleaseEvent( event.xbutton.button );
+            mouseButtonReleaseEvent( event.xbutton.button );
         } else if ( event.type == MotionNotify ) {
-            if ( self->holdMouse_ )
-                self->mouseOffsetEvent( event.xmotion.x, event.xmotion.y );
+            if ( holdMouse_ )
+                mouseOffsetEvent( event.xmotion.x, event.xmotion.y );
             else {
-                self->mouseMoveEvent( event.xmotion.x, event.xmotion.y );
+                mouseMoveEvent( event.xmotion.x, event.xmotion.y );
             }
         }
     }
-    self->preFrame();
-    self->frame();
-    self->postFrame();
-    self->swapBuffers();
+    preFrame();
+    frame();
+    postFrame();
+    swapBuffers();
 
     // Conditionally force mouse hold position.
-    if ( self->holdMouse_ ) {
-        XWarpPointer( self->display_, None, self->window_, 0, 0, 0, 0,
-                      self->holdMouseX_, self->holdMouseY_ );
+    if ( holdMouse_ ) {
+        XWarpPointer( display_, None, window_, 0, 0, 0, 0, holdMouseX_,
+                      holdMouseY_ );
     }
 }
 
 void Render::run() {
     preLoop();
-    //    event::Context::run();
+    loop();
     postLoop();
 }
 
