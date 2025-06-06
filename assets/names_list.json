@@ -1,0 +1,64 @@
+{
+    "data": [
+        {
+            "name": "bravo",
+            "level": 101,
+            "isOpened": false
+        },
+        {
+            "name": "tango",
+            "level": 101,
+            "isOpened": false
+        },
+        {
+            "name": "lima",
+            "level": 101,
+            "isOpened": false
+        },
+        {
+            "name": "sarah",
+            "level": 101,
+            "isOpened": false
+        },
+        {
+            "name": "bob",
+            "level": 101,
+            "isOpened": false
+        },
+        {
+            "name": "joe",
+            "level": 101,
+            "isOpened": false
+        },
+        {
+            "name": "foo",
+            "level": 101,
+            "isOpened": false
+        },
+        {
+            "name": "bar",
+            "level": 101,
+            "isOpened": false
+        },
+        {
+            "name": "baz",
+            "level": 101,
+            "isOpened": false
+        },
+        {
+            "name": "robert",
+            "level": 101,
+            "isOpened": false
+        },
+        {
+            "name": "unknown",
+            "level": 101,
+            "isOpened": false
+        },
+        {
+            "name": "bravo",
+            "level": 101,
+            "isOpened": false
+        }
+    ]
+}
