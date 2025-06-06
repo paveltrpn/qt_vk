@@ -147,59 +147,60 @@ void Render::configureX11() {
 
 void Render::loop() {
     // XLib event loop
-    while ( XPending( display_ ) ) {
-        XEvent event;
-        XNextEvent( display_, &event );
-        if ( event.type == KeyPress ) {
-            auto keyEventCode = event.xkey.keycode;
+    while ( run_ ) {
+        while ( XPending( display_ ) ) {
+            XEvent event;
+            XNextEvent( display_, &event );
+            if ( event.type == KeyPress ) {
+                auto keyEventCode = event.xkey.keycode;
 
-            // Handle key press
-            keyPressEvent( event.xkey.keycode );
+                // Handle key press
+                keyPressEvent( event.xkey.keycode );
 
-            // Handle escape button here for convinient access to uv timer handle
-            switch ( keyEventCode ) {
-                case 9: {  // == ESCAPE
-                    // stop render loop
-                    run_ = false;
-                    break;
+                // Handle escape button here for convinient access to uv timer handle
+                switch ( keyEventCode ) {
+                    case 9: {  // == ESCAPE
+                        // stop render loop
+                        run_ = false;
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
                 }
-                default: {
-                    break;
+                // Force immidiate output to stdout
+                std::cout << std::flush;
+            } else if ( event.type == KeyRelease ) {
+                keyReleaseEvent( event.xkey.keycode );
+            } else if ( event.type == ButtonPress ) {
+                mouseButtonPressEvent( event.xbutton.button );
+            } else if ( event.type == ButtonRelease ) {
+                mouseButtonReleaseEvent( event.xbutton.button );
+            } else if ( event.type == MotionNotify ) {
+                if ( holdMouse_ )
+                    mouseOffsetEvent( event.xmotion.x, event.xmotion.y );
+                else {
+                    mouseMoveEvent( event.xmotion.x, event.xmotion.y );
                 }
-            }
-            // Force immidiate output to stdout
-            std::cout << std::flush;
-        } else if ( event.type == KeyRelease ) {
-            keyReleaseEvent( event.xkey.keycode );
-        } else if ( event.type == ButtonPress ) {
-            mouseButtonPressEvent( event.xbutton.button );
-        } else if ( event.type == ButtonRelease ) {
-            mouseButtonReleaseEvent( event.xbutton.button );
-        } else if ( event.type == MotionNotify ) {
-            if ( holdMouse_ )
-                mouseOffsetEvent( event.xmotion.x, event.xmotion.y );
-            else {
-                mouseMoveEvent( event.xmotion.x, event.xmotion.y );
             }
         }
-    }
-    preFrame();
-    frame();
-    postFrame();
-    swapBuffers();
 
-    // Conditionally force mouse hold position.
-    if ( holdMouse_ ) {
-        XWarpPointer( display_, None, window_, 0, 0, 0, 0, holdMouseX_,
-                      holdMouseY_ );
+        preFrame();
+        frame();
+        postFrame();
+        swapBuffers();
+
+        // Conditionally force mouse hold position.
+        if ( holdMouse_ ) {
+            XWarpPointer( display_, None, window_, 0, 0, 0, 0, holdMouseX_,
+                          holdMouseY_ );
+        }
     }
 }
 
 void Render::run() {
     preLoop();
-    for ( ;; ) {
-        loop();
-    }
+    loop();
     postLoop();
 }
 

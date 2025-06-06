@@ -41,8 +41,6 @@ RenderVK::RenderVK()
 
         renderCommand_ = std::make_unique<vk::SceneRenderCommand>(
             context_.get(), piplineMatrixReady_.get() );
-
-        ready_ = true;
     } catch ( const std::runtime_error &e ) {
         throw std::runtime_error( e.what() );
     }

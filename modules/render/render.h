@@ -61,7 +61,6 @@ protected:
 protected:
     bool run_{ true };
     Timer timer_{};
-    bool ready_{ false };
 
     // X11
     Display *display_;
