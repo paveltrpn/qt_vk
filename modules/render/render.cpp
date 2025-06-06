@@ -197,7 +197,9 @@ void Render::loop() {
 
 void Render::run() {
     preLoop();
-    loop();
+    for ( ;; ) {
+        loop();
+    }
     postLoop();
 }
 

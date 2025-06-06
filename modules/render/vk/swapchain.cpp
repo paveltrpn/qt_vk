@@ -155,7 +155,7 @@ void Context::makeSwapchain() {
     }
 
     // Reserve space for frames images render into
-    frames_.reserve( framesCount_ );
+    frames_.resize( framesCount_ );
 
     log::debug<DEBUG_OUTPUT_SWAPCHAIN_CPP>(
         "vk::Swapchain === vulkan swapchain surface capabilities image count "
@@ -311,7 +311,7 @@ void Context::makeSwapchain() {
 void Context::makeFrames( const Pipeline *pipeline ) {
     // Acquire all swapchain images at one call
     std::vector<VkImage> swapChainImages;
-    swapChainImages.reserve( framesCount_ );
+    swapChainImages.resize( framesCount_ );
     if ( const auto err = vkGetSwapchainImagesKHR(
              device_, swapchain_, &framesCount_, swapChainImages.data() );
          err != VK_SUCCESS ) {
