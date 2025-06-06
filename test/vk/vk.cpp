@@ -5,19 +5,12 @@
 #include "log/log.h"
 #include "render/vk/rendervk.h"
 
-import config;
-
 int main( int argc, char **argv ) {
     std::unique_ptr<tire::Render> rndr;
     try {
-        new tire::Config{ std::filesystem::path{} / "assets" / "config.json" };
-
         rndr = std::make_unique<tire::RenderVK>();
         // rndr->displayRenderInfo();
 
-        auto configPtr = tire::Config::instance();
-
-        rndr->scene( configPtr->getBasePath() / "assets" / "m01.json" );
         rndr->run();
     } catch ( const std::exception &e ) {
         tire::log::error( "caught exception: {}", e.what() );

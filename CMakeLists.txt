@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.30)
 
-set(CMAKE_C_COMPILER clang)
-set(CMAKE_CXX_COMPILER clang++)
+#set(CMAKE_C_COMPILER clang)
+#set(CMAKE_CXX_COMPILER clang++)
 add_compile_options(-std=c++26)
 #add_compile_options(-stdlib=libc++)
 #add_link_options(-stdlib=libc++)
@@ -31,6 +31,13 @@ add_library(log
     modules/log/log.h
     modules/log/log.cpp
 )
+#global user defined output messages macro definition
+add_compile_definitions(ENABLE_DEBUG_OUTPUT=false)
+add_compile_definitions(ENABLE_WARNING_OUTPUT=true)
+add_compile_definitions(ENABLE_INFO_OUTPUT=true)
+add_compile_definitions(ENABLE_NOTICE_OUTPUT=true)
+add_compile_definitions(ENABLE_ERROR_OUTPUT=true)
+set_target_properties(log PROPERTIES LINKER_LANGUAGE CXX)
 
 # Module render
 # ================================
@@ -83,5 +90,6 @@ target_link_libraries(vk_test PUBLIC
     render 
     X11
     Xfixes
+    GL
     Vulkan::Vulkan 
 )

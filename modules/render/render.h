@@ -1,68 +1,89 @@
 
 #pragma once
 
-#include <thread>
-#include <mutex>
+#include <memory>
+#include <list>
+#include <filesystem>
 
-#include <android_native_app_glue.h>
+#include <GL/glx.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+
+#include "uv.h"
 
 #include "timer.h"
 
 namespace tire {
-    struct Render {
-        Render();
 
-        Render(const Render &other) = delete;
+namespace event {
 
-        Render(Render &&other) = delete;
+template <typename T>
+struct Task;
 
-        Render &operator=(const Render &other) = delete;
-
-        Render &operator=(Render &&other) = delete;
-
-        virtual ~Render();
-
-        virtual void init() = 0;
-
-        virtual void clean() = 0;
-
-        virtual void preLoop() = 0;
-
-        void setWindow(ANativeWindow *window);
-
-        void start();
-
-        void stop();
-
-        void run();
-
-        virtual void postLoop() = 0;
-
-        static void threadStartCallback(void *self);
-
-    protected:
-        virtual void preFrame() = 0;
-
-        virtual void frame() = 0;
-
-        virtual void postFrame() = 0;
-
-        virtual void swapBuffers() = 0;
-
-    protected:
-        ANativeWindow *window_{};
-        bool ready_{false};
-        Timer timer_{};
-
-    private:
-        enum class RenderThreadMessage {
-            MSG_NONE = 0,
-            MSG_WINDOW_SET,
-            MSG_RENDER_LOOP_EXIT
-        };
-
-        std::unique_ptr<std::thread> worker_;
-        std::mutex mutex_;
-        RenderThreadMessage msg_{};
-    };
 }
+
+struct Render {
+    Render();
+
+    Render( const Render &rhs ) = delete;
+    Render( Render &&ths ) = delete;
+
+    Render &operator=( const Render &rhs ) = delete;
+    Render &operator=( Render &&rhs ) = delete;
+
+    virtual ~Render();
+
+    virtual void displayRenderInfo() = 0;
+    void run();
+
+protected:
+    virtual void preLoop() = 0;
+    virtual void preFrame() = 0;
+    virtual void frame() = 0;
+    virtual void postFrame() = 0;
+    virtual void swapBuffers() = 0;
+    virtual void postLoop() = 0;
+
+    virtual void setSwapInterval( int interval ) = 0;
+
+    void keyPressEvent( unsigned int key );
+    void keyReleaseEvent( unsigned int key );
+    void mouseButtonPressEvent( unsigned int key );
+    void mouseButtonReleaseEvent( unsigned int key );
+
+    // Call when mouse moves free upon window. "x" and "y"
+    // represent current cursor position in window coordinates
+    void mouseMoveEvent( unsigned int x, unsigned int y );
+    // Call when mouse holds in defined position. "x" and "y"
+    // represent current cursor ofssets.
+    void mouseOffsetEvent( unsigned int x, unsigned int y );
+
+protected:
+    bool run_{ true };
+    Timer timer_{};
+    bool ready_{ false };
+
+    // X11
+    Display *display_;
+    Window window_;
+    Colormap colorMap_;
+    GLXFBConfig bestFbc_;
+
+    bool holdMouse_{ false };
+    unsigned int holdMouseX_{ 500 };
+    unsigned int holdMouseY_{ 500 };
+
+    // window properties
+    int posx_{};
+    int posy_{};
+    int width_{};
+    int height_{};
+
+private:
+    void configureX11();
+
+private:
+    static void loop( uv_timer_t *handle );
+};
+
+}  // namespace tire

@@ -5,6 +5,9 @@
 #include <expected>
 
 #include <vulkan/vulkan.h>
+
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 #include <vulkan/vulkan_core.h>
 
 #define CONFIG_APPLAICATION_NAME "application_name"
@@ -14,49 +17,41 @@
 #define CONFIG_ENABLE_API_DUMP_VALIDATION_LAYRES false
 #define CONFIG_VERBOSE_VULKAN_OUTPUT false
 #define CONFIG_FRAMES_COUNT 3
+#define CONFIG_ENABLE_RAYTRACING_APPLICATIONS false
 
 namespace tire::vk {
 
 struct Pipeline;
 
 struct Context final {
-    Context( ANativeWindow *window );
-
+    Context( Display* display, Window window );
     ~Context();
 
-    Context( const Context &other ) = delete;
-
-    Context( Context &&other ) = delete;
-
-    Context &operator=( const Context &other ) = delete;
-
-    Context &operator=( Context &&other ) = delete;
+    Context( const Context& other ) = delete;
+    Context( Context&& other ) = delete;
+    Context& operator=( const Context& other ) = delete;
+    Context& operator=( Context&& other ) = delete;
 
     // Init all context
     void init();
 
     [[nodiscard]] VkInstance instance() const { return instance_; };
-
     [[nodiscard]] VkSurfaceKHR surface() const { return surface_; };
-
     [[nodiscard]] VkDevice device() const { return device_; };
-
     [[nodiscard]] VkCommandPool commandPool() const { return commandPool_; };
-
     [[nodiscard]] VkSwapchainKHR swapchain() const { return swapchain_; };
 
-    [[nodiscard]] const VkSurfaceFormatKHR &surfaceFormat() const {
+    [[nodiscard]] const VkSurfaceFormatKHR& surfaceFormat() const {
         return surfaceFormat_;
     };
 
     [[nodiscard]] uint32_t memoryRequirements(
         uint32_t typeFilter, VkMemoryPropertyFlags properties ) const;
-
     [[nodiscard]] VkFormat findSupportedFormat(
-        const std::vector<VkFormat> &candidates, VkImageTiling tiling,
+        const std::vector<VkFormat>& candidates, VkImageTiling tiling,
         VkFormatFeatureFlags features ) const;
 
-    void makeFrames( const Pipeline *pipeline );
+    void makeFrames( const Pipeline* pipeline );
 
     [[nodiscard]] std::tuple<VkSemaphore, VkSemaphore, VkFence> getFrameSyncSet(
         size_t id ) {
@@ -67,13 +62,13 @@ struct Context final {
 
     [[nodiscard]] uint32_t framesCount() const { return framesCount_; };
 
-    void present( const VkSemaphore semaphore, uint32_t *imageIndex );
+    void present( const VkSemaphore semaphore, uint32_t* imageIndex );
 
     [[nodiscard]] VkFramebuffer framebuffer( size_t id ) const {
         return frames_[id].framebuffer_;
     };
 
-    [[nodiscard]] const VkQueue &graphicsQueue() const {
+    [[nodiscard]] const VkQueue& graphicsQueue() const {
         return graphicsQueue_;
     }
 
@@ -83,21 +78,16 @@ struct Context final {
         return graphicsFamilyQueueId_;
     };
 
-    [[nodiscard]] const VkExtent2D &currentExtent() const {
+    [[nodiscard]] const VkExtent2D& currentExtent() const {
         return currentExtent_;
     };
 
 private:
     void makeInstance();
-
-    void makeAndroidSurface();
-
+    void makeXlibSurface();
     void collectPhysicalDevices();
-
     void makeDevice();
-
     void makeCommandPool();
-
     void makeSwapchain();
 
 private:
@@ -119,12 +109,14 @@ private:
     };
 
 private:
-    ANativeWindow *window_;
+    // Outer world connection
+    const Display* display_;
+    const Window window_;
 
     // Instance
     VkInstance instance_{ VK_NULL_HANDLE };
     VkDebugUtilsMessengerEXT debugMessenger_{ VK_NULL_HANDLE };
-    std::vector<const char *> desiredValidationLayerList_{};
+    std::vector<const char*> desiredValidationLayerList_{};
     std::vector<VkExtensionProperties> extensionProperties_{};
     std::vector<VkLayerProperties> layerProperties_{};
 

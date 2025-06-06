@@ -1,9 +1,10 @@
 
 #include <set>
 
-#include "vulkan/vk_enum_string_helper.h"
+#define VK_USE_PLATFORM_XLIB_KHR
+#include <vulkan/vk_enum_string_helper.h>
 
-#include "../../log/log.h"
+#include "log/log.h"
 static constexpr bool DEBUG_OUTPUT_DEVICE_CPP{ true };
 
 #include "context.h"
@@ -229,6 +230,24 @@ void Context::makeDevice() {
     std::vector<const char *> desiredExtensionsList{};
     desiredExtensionsList.emplace_back( "VK_KHR_swapchain" );
 
+    if ( CONFIG_ENABLE_RAYTRACING_APPLICATIONS ) {
+        log::info( "vk::Device === raytracing extansions enabled" );
+
+        desiredExtensionsList.emplace_back( "VK_KHR_ray_query" );
+        desiredExtensionsList.emplace_back( "VK_KHR_ray_tracing_pipeline" );
+        desiredExtensionsList.emplace_back( "VK_KHR_ray_tracing_maintenance1" );
+        desiredExtensionsList.emplace_back(
+            "VK_KHR_ray_tracing_position_fetch" );
+        desiredExtensionsList.emplace_back( "VK_KHR_acceleration_structure" );
+        desiredExtensionsList.emplace_back( "VK_EXT_descriptor_indexing" );
+        desiredExtensionsList.emplace_back( "VK_KHR_buffer_device_address" );
+        desiredExtensionsList.emplace_back( "VK_KHR_deferred_host_operations" );
+        desiredExtensionsList.emplace_back( "VK_KHR_spirv_1_4" );
+        desiredExtensionsList.emplace_back( "VK_KHR_shader_float_controls" );
+    } else {
+        log::info( "vk::Device === raytracing extansions disabled" );
+    }
+
     VkDeviceCreateInfo deviceCreateInfo{};
     deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
     deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.data();
@@ -323,6 +342,11 @@ void Context::makeDevice() {
             "success!" );
     }
 
+    for ( const auto &item : surfaceFormats_ ) {
+        log::notice( "vk::Device === format: {}",
+                     string_VkFormat( item.format ) );
+    }
+
     // Physical device present modes
     uint32_t presentModeCount;
     if ( const auto err = vkGetPhysicalDeviceSurfacePresentModesKHR(
@@ -355,6 +379,11 @@ void Context::makeDevice() {
     } else {
         log::debug<DEBUG_OUTPUT_DEVICE_CPP>(
             "vk::Device === physical device present modes acquire success!" );
+    }
+
+    for ( const auto &item : presentModes_ ) {
+        log::notice( "vk::Device === mode: {}",
+                     string_VkPresentModeKHR( item ) );
     }
 
 #define CHOSEN_SURFACE_FORMAT 0

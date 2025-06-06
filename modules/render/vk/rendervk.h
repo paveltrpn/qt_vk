@@ -1,49 +1,49 @@
 
 #pragma once
 
-#include "../render.h"
-#include "context.h"
+#include <vector>
+#include <vulkan/vulkan.h>
+#include <vulkan/vulkan_core.h>
+
 #include "pipelines/pipeline.h"
+#include "buffers/vertex_buffer.h"
+#include "command_pool.h"
 #include "commands/scene_render_command.h"
 
-#include "../../log/log.h"
+#include "../render.h"
 
 #define FRAMES_IN_FLIGHT_COUNT 3
 
 namespace tire {
-    struct RenderVK final : Render {
-        RenderVK();
 
-        ~RenderVK();
+struct RenderVK final : Render {
+    RenderVK();
+    ~RenderVK() override = default;
 
-        void init() override;
+    void displayRenderInfo() override{};
+    void setSwapInterval( int interval ) override;
 
-        void clean() override;
+private:
+    void preLoop() override;
+    void preFrame() override;
+    void frame() override;
+    void postFrame() override;
+    void swapBuffers() override;
+    void postLoop() override;
 
-        void preLoop() override;
+    void createGraphicsPipeline();
+    void createSyncObjects();
 
-        void postLoop() override;
+private:
+    std::unique_ptr<vk::Context> context_{};
 
-    protected:
+    std::unique_ptr<vk::Pipeline> piplineMatrixReady_{};
 
-        void preFrame() override;
+    std::unique_ptr<vk::SceneRenderCommand> renderCommand_{};
 
-        void frame() override;
+    float angle_{};
 
-        void postFrame() override;
+    uint32_t currentFrame_{ 0 };
+};
 
-        void swapBuffers() override;
-
-    private:
-        std::unique_ptr<vk::Context> context_{};
-
-        std::unique_ptr<vk::Pipeline> piplineMatrixReady_{};
-
-        std::unique_ptr<vk::SceneRenderCommand> renderCommand_{};
-
-        float angle_{};
-
-        uint32_t currentFrame_{0};
-    };
-
-}
+}  // namespace tire
