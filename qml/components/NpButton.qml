@@ -2,7 +2,7 @@ import QtQuick 2.15
 import QtQuick.Templates 2.15 as QuickTemplates
 import QtQuick.Controls.impl 2.15
 
-import NetPet 1.0
+import Tire 1.0
 
 QuickTemplates.Button {
     id: control

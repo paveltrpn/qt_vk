@@ -57,7 +57,7 @@ MainWindow::MainWindow( QObject *parent )
 }
 
 void MainWindow::registerTypes() {
-    qmlRegisterSingletonInstance( "NetPet", 1, 0, "Theme", theme_ );
+    qmlRegisterSingletonInstance( "Tire", 1, 0, "Theme", theme_ );
 }
 
 }  // namespace netpet

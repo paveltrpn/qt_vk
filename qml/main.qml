@@ -1,7 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
-import NetPet 1.0
+import Tire 1.0
 import "components"
 
 ApplicationWindow {
