@@ -35,9 +35,9 @@ void RenderItem::sync() {
     auto wnd = window();
 
     if ( !render_ ) {
-        QSGRendererInterface *rif = wnd->rendererInterface();
+        const auto *rif = wnd->rendererInterface();
 
-        QVulkanInstance *inst =
+        const auto *inst =
             reinterpret_cast<QVulkanInstance *>( rif->getResource(
                 wnd, QSGRendererInterface::VulkanInstanceResource ) );
 
@@ -48,7 +48,7 @@ void RenderItem::sync() {
         const auto dev = *reinterpret_cast<VkDevice *>(
             rif->getResource( wnd, QSGRendererInterface::DeviceResource ) );
 
-        VkRenderPass rp = *reinterpret_cast<VkRenderPass *>(
+        const auto rp = *reinterpret_cast<VkRenderPass *>(
             rif->getResource( wnd, QSGRendererInterface::RenderPassResource ) );
 
         render_ = new RenderVK{ inst->vkInstance(), physDev, dev, rp };
@@ -70,14 +70,14 @@ void RenderItem::sync() {
             wnd, &QQuickWindow::beforeRenderPassRecording, this,
             [this, wnd]() {
                 //
-                QSGRendererInterface *rif = wnd->rendererInterface();
+                const auto *rif = wnd->rendererInterface();
 
                 wnd->beginExternalCommands();
 
                 // Must query the command buffer _after_ beginExternalCommands(), this is
                 // actually important when running on Vulkan because what we get here is a
                 // new secondary command buffer, not the primary one.
-                VkCommandBuffer cb =
+                const auto cb =
                     *reinterpret_cast<VkCommandBuffer *>( rif->getResource(
                         wnd, QSGRendererInterface::CommandListResource ) );
                 render_->mainPassRecordingStart( cb );

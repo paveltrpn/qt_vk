@@ -17,6 +17,8 @@ struct RenderVK final {
               VkRenderPass rp );
     ~RenderVK() = default;
 
+    void init();
+
     void frameStart();
 
     void mainPassRecordingStart( VkCommandBuffer cb );

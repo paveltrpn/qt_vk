@@ -21,10 +21,11 @@ namespace tire {
 
 RenderVK::RenderVK( VkInstance instance, VkPhysicalDevice pDevice,
                     VkDevice device, VkRenderPass rp ) {
-    try {
-        context_ =
-            std::make_unique<vk::Context>( instance, pDevice, device, rp );
+    context_ = std::make_unique<vk::Context>( instance, pDevice, device, rp );
+};
 
+void RenderVK::init() {
+    try {
         piplineMatrixReady_ =
             std::make_unique<vk::PiplineMatrixReady>( context_.get() );
 
@@ -39,10 +40,12 @@ RenderVK::RenderVK( VkInstance instance, VkPhysicalDevice pDevice,
     } catch ( const std::runtime_error &e ) {
         throw std::runtime_error( e.what() );
     }
-};
+}
 
-void RenderVK::frameStart(){
-
+void RenderVK::frameStart() {
+    if ( !initialized_ ) {
+        init();
+    }
 };
 
 void RenderVK::mainPassRecordingStart( VkCommandBuffer cb ) {
