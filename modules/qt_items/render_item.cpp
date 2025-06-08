@@ -28,6 +28,9 @@ void RenderItem::handleWindowChanged( QQuickWindow *win ) {
     }
 }
 
+void RenderItem::cleanup() {
+}
+
 void RenderItem::sync() {
     auto wnd = window();
 

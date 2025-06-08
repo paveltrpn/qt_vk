@@ -14,9 +14,11 @@ struct RenderItem final : QQuickItem {
 
 public:
     RenderItem( QQuickItem *parent = nullptr );
-    void sync();
-    void cleanup(){};
 
+    void sync();
+    void cleanup();
+
+private:
     void handleWindowChanged( QQuickWindow *win );
 
 private:
