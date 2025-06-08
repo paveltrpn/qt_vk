@@ -6,3 +6,4 @@ assets/shaders/spirv/*.spv
 *.cap
 *.foz
 tmp/*
+settings.ini

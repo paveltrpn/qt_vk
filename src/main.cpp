@@ -4,7 +4,7 @@
 #include <QApplication>
 #include <QStyleHints>
 
-#include "window/window.h"
+#include "window.h"
 
 int main( int argc, char *argv[] ) {
     QGuiApplication app( argc, argv );

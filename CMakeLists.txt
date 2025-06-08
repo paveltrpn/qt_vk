@@ -1,10 +1,6 @@
 cmake_minimum_required(VERSION 3.30)
 
-#set(CMAKE_C_COMPILER clang)
-#set(CMAKE_CXX_COMPILER clang++)
 add_compile_options(-std=c++26)
-#add_compile_options(-stdlib=libc++)
-#add_link_options(-stdlib=libc++)
 set(CMAKE_BUILD_TYPE Debug)
 
 project(tire)
@@ -56,40 +52,30 @@ find_package(Qt6 ${QT_VERSION} COMPONENTS
     QuickControls2
     Qml)
 
+
 # ===========================================================
 
-add_library(window
-    src/window/window.h
-    src/window/window.cpp
-    src/window/theme_manager.h
-    src/window/theme_manager.cpp
-    src/window/tree_model.h
-    src/window/tree_model.cpp
-    src/window/list_model.h
-    src/window/list_model.cpp
-)
-set_target_properties(window PROPERTIES AUTOMOC TRUE)
-target_link_libraries(window PUBLIC
+# The Service
+file(GLOB MOD_TIRE_SRC "src/*.cpp" "src/*.h")
+add_executable(${PROJECT_NAME} ${MOD_TIRE_SRC})
+set_target_properties(tire PROPERTIES AUTOMOC TRUE)
+target_link_libraries(${PROJECT_NAME}
     Qt::Core
     Qt::Gui
     Qt::Quick
     Qt::QuickWidgets
     Qt::QuickControls2
-    Qt::Qml)
-
-# The Service
-add_executable(${PROJECT_NAME} src/main.cpp)
-target_link_libraries(${PROJECT_NAME}
-    window)
+    Qt::Qml
+)
 
 # VK test 
-add_subdirectory(test/vk)
-target_link_libraries(vk_test PUBLIC 
-    log 
-    algebra 
-    render 
-    X11
-    Xfixes
-    GL
-    Vulkan::Vulkan 
-)
+#add_subdirectory(test/vk)
+#target_link_libraries(vk_test PUBLIC
+#    log
+#    algebra
+#    render
+#    X11
+#    Xfixes
+#    GL
+#    Vulkan::Vulkan
+#)

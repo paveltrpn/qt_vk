@@ -17,8 +17,6 @@ namespace netpet {
 MainWindow::MainWindow( QObject *parent )
     : QObject{ parent }
     , theme_{ new ThemeManager{ workPath(), this } }
-    , treeModel_{ new TreeModel{ this } }
-    , listModel_{ new ListModel{ this } }
     , engine_{ new QQmlEngine{ this } } {
     std::cout << std::format( "start... work path: {}\n",
                               workPath().path().toStdString() );
@@ -56,25 +54,10 @@ MainWindow::MainWindow( QObject *parent )
     const auto restoredGeometry =
         settings_->value( "main_window_geometry", QRect( 300, 300, 640, 480 ) );
     window_->setGeometry( restoredGeometry.toRect() );
-
-    std::vector<QString> firsts{ "top level one", "top level two",
-                                 "top level three" };
-    std::vector<QString> seconds{ "sec level one", "sec level two",
-                                  "sec level three" };
-    std::vector<QString> thirds{ "tre level one", "tre level two",
-                                 "tre level three" };
-
-    treeModel_->populate( "names_tree.json" );
-
-    listModel_->populate( "names_list.json" );
 }
 
 void MainWindow::registerTypes() {
     qmlRegisterSingletonInstance( "NetPet", 1, 0, "Theme", theme_ );
-    qmlRegisterSingletonInstance( "NetPet", 1, 0, "LocalTreeModel",
-                                  treeModel_ );
-    qmlRegisterSingletonInstance( "NetPet", 1, 0, "LocalListModel",
-                                  listModel_ );
 }
 
 }  // namespace netpet
