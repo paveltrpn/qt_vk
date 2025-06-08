@@ -8,8 +8,9 @@
 
 namespace tire {
 
-struct RenderItem final : QQuickItem {
+struct RenderItem : QQuickItem {
     Q_OBJECT
+    Q_PROPERTY( qreal t READ t WRITE setT NOTIFY tChanged )
     QML_ELEMENT
 
 public:
@@ -17,12 +18,19 @@ public:
 
     void sync();
     void cleanup();
+    qreal t() const { return t_; }
+    void setT( qreal t );
+
+signals:
+    void tChanged();
 
 private:
     void handleWindowChanged( QQuickWindow *win );
 
 private:
-    RenderVK *render_;
+    bool initialized_{ false };
+    RenderVK *render_{ nullptr };
+    qreal t_{};
 };
 
 }  // namespace tire

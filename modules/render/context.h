@@ -70,7 +70,7 @@ private:
     VkInstance instance_{ VK_NULL_HANDLE };
     VkPhysicalDevice pDevice_{ VK_NULL_HANDLE };
     VkDevice device_{ VK_NULL_HANDLE };
-    VkExtent2D currentExtent_{ 100, 100 };
+    VkExtent2D currentExtent_{ 1515, 1006 };
     VkRenderPass renderPass_{ VK_NULL_HANDLE };
 
     VkPhysicalDeviceProperties devProps_{};

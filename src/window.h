@@ -6,16 +6,17 @@
 #include <QQmlComponent>
 #include <QQuickWindow>
 #include <QtQml>
+#include <QQuickView>
 
 #include "theme_manager.h"
 #include "qt_items/render_item.h"
 
 namespace tire {
 
-struct MainWindow final : QObject {
-    explicit MainWindow( QObject *parent = nullptr );
+struct MainWindow final : QQuickView {
+    explicit MainWindow( QQuickView *parent = nullptr );
 
-    ~MainWindow() override { delete window_; }
+    ~MainWindow() override = default;
 
     void registerTypes();
 
@@ -29,11 +30,6 @@ private:
     QSettings *settings_;
 
     ThemeManager *theme_;
-    std::unique_ptr<RenderItem> renderItem_;
-
-    QQmlEngine *engine_;
-    QQmlComponent *component_;
-    QQuickWindow *window_;
 };
 
 }  // namespace tire

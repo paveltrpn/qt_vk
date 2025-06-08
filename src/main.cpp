@@ -13,7 +13,8 @@ int main( int argc, char *argv[] ) {
 
     std::cout << "Qt version: " << qVersion() << "\n";
 
-    [[maybe_unused]] auto *mainWindow = new tire::MainWindow( &app );
+    tire::MainWindow view;
+    view.show();
 
     return app.exec();
 }

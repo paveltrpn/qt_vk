@@ -13,21 +13,17 @@
 namespace tire {
 
 struct RenderVK final {
-    RenderVK( VkInstance instance, VkPhysicalDevice pDevice, VkDevice device,
-              VkRenderPass rp );
+    RenderVK() = default;
     ~RenderVK() = default;
 
-    void init();
-
-    void frameStart();
+    void init( VkInstance instance, VkPhysicalDevice pDevice, VkDevice device,
+               VkRenderPass rp );
 
     void mainPassRecordingStart( VkCommandBuffer cb );
 
     void createGraphicsPipeline();
 
 private:
-    bool initialized_{ false };
-
     std::unique_ptr<vk::Context> context_{};
 
     std::unique_ptr<vk::Pipeline> piplineMatrixReady_{};
@@ -37,6 +33,9 @@ private:
     uint32_t currentFrame_{ 0 };
 
     Timer timer_{};
+
+    // Background color value
+    std::array<VkClearValue, 2> clearValues_{};
 };
 
 }  // namespace tire

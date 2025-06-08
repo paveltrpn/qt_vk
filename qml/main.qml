@@ -4,54 +4,32 @@ import QtQuick.Layouts 1.3
 import Tire 1.0
 import "components"
 
-ApplicationWindow {
+Item {
     id: netPetWnd
-
     readonly property var _fonts: Constants.fonts
     readonly property var _units: Constants.units
 
-    property bool isFrameless: false
-
-    // width: 1480
-    //height: 840
-    minimumWidth: 320
-    minimumHeight: 240
-
-    title: "model-view"
-
-    property var windowFlags: isFrameless ? (Qt.FramelessWindowHint | Qt.ClickFocus) : undefined
-
-    // flags: windowFlags
-    visible: true
-
-    color: "transparent"
-
-    property bool isListUnfolded: false
-
     Render {
         id: renderer
+        SequentialAnimation on t {
+            NumberAnimation { to: 1; duration: 2500; easing.type: Easing.InQuad }
+            NumberAnimation { to: 0; duration: 2500; easing.type: Easing.OutQuad }
+            loops: Animation.Infinite
+            running: true
+        }
     }
 
-    Rectangle {
+    Item {
         id: background
-        anchors.fill: parent
-        radius: netPetWnd.isFrameless ? 16 : 0
-
-        color: Theme.colors["background"]
-
-        Rectangle {
-            id: backgroundFrame
-
-            anchors {
-                fill: parent
-                margins: 8
-            }
-
-            color: Theme.colors["background_additional"]
-            radius: 16 - 6
+        anchors {
+            left: parent.left
+            right: parent.right
+            top: parent.top
+            bottom: parent.bottom
+            // leftMargin: 500
         }
 
-        Rectangle {
+        Item {
             id: topDragArea
             anchors {
                 top: background.top
@@ -59,7 +37,6 @@ ApplicationWindow {
                 right: background.right
             }
             height: 8
-            color: "transparent"
 
             MouseArea {
                 id: topMouseRegion

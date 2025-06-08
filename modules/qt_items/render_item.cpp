@@ -5,7 +5,6 @@
 #include <QVulkanInstance>
 
 #include "render_item.h"
-#include "render_node.h"
 
 namespace tire {
 
@@ -23,43 +22,67 @@ void RenderItem::handleWindowChanged( QQuickWindow *win ) {
         connect( win, &QQuickWindow::sceneGraphInvalidated, this,
                  &RenderItem::cleanup, Qt::DirectConnection );
 
-        // Ensure we start with cleared to black. The squircle's blend mode relies on this.
         win->setColor( Qt::black );
+    } else {
+        qDebug() << "RenderItem handleWindowChanged no win..";
     }
 }
 
 void RenderItem::cleanup() {
+    qDebug() << "RenderItem cleanup..";
+}
+
+void RenderItem::setT( qreal t ) {
+    if ( t == t_ ) return;
+    t_ = t;
+    emit tChanged();
+    if ( window() ) {
+        window()->update();
+    }
 }
 
 void RenderItem::sync() {
     auto wnd = window();
+    if ( !wnd ) {
+        qDebug() << "RenderItem !wnd..";
+    }
 
     if ( !render_ ) {
-        const auto *rif = wnd->rendererInterface();
-
-        const auto *inst =
-            reinterpret_cast<QVulkanInstance *>( rif->getResource(
-                wnd, QSGRendererInterface::VulkanInstanceResource ) );
-
-        const auto physDev =
-            *reinterpret_cast<VkPhysicalDevice *>( rif->getResource(
-                wnd, QSGRendererInterface::PhysicalDeviceResource ) );
-
-        const auto dev = *reinterpret_cast<VkDevice *>(
-            rif->getResource( wnd, QSGRendererInterface::DeviceResource ) );
-
-        const auto rp = *reinterpret_cast<VkRenderPass *>(
-            rif->getResource( wnd, QSGRendererInterface::RenderPassResource ) );
-
-        render_ = new RenderVK{ inst->vkInstance(), physDev, dev, rp };
+        render_ = new RenderVK{};
 
         // Initializing resources is done before starting to record the
         // renderpass, regardless of wanting an underlay or overlay.
         connect(
             wnd, &QQuickWindow::beforeRendering, this,
-            [this]() {
-                //
-                render_->frameStart();
+            [this, wnd]() {
+                if ( !initialized_ ) {
+                    const auto *rif = wnd->rendererInterface();
+
+                    const auto inst =
+                        reinterpret_cast<QVulkanInstance *>( rif->getResource(
+                            wnd,
+                            QSGRendererInterface::VulkanInstanceResource ) );
+                    if ( !inst ) {
+                        qDebug() << "RenderItem !inst..";
+                    }
+
+                    const auto physDev =
+                        *reinterpret_cast<VkPhysicalDevice *>( rif->getResource(
+                            wnd,
+                            QSGRendererInterface::PhysicalDeviceResource ) );
+
+                    const auto dev =
+                        *reinterpret_cast<VkDevice *>( rif->getResource(
+                            wnd, QSGRendererInterface::DeviceResource ) );
+
+                    const auto rp =
+                        *reinterpret_cast<VkRenderPass *>( rif->getResource(
+                            wnd, QSGRendererInterface::RenderPassResource ) );
+
+                    render_->init( inst->vkInstance(), physDev, dev, rp );
+
+                    initialized_ = true;
+                }
             },
             Qt::DirectConnection );
 
@@ -68,24 +91,25 @@ void RenderItem::sync() {
         // would render the squircle on top (overlay).
         connect(
             wnd, &QQuickWindow::beforeRenderPassRecording, this,
-            [this, wnd]() {
-                //
-                const auto *rif = wnd->rendererInterface();
+            [this]() {
+                auto w = this->window();
+                const auto *rif = w->rendererInterface();
 
-                wnd->beginExternalCommands();
+                w->beginExternalCommands();
 
                 // Must query the command buffer _after_ beginExternalCommands(), this is
                 // actually important when running on Vulkan because what we get here is a
                 // new secondary command buffer, not the primary one.
                 const auto cb =
                     *reinterpret_cast<VkCommandBuffer *>( rif->getResource(
-                        wnd, QSGRendererInterface::CommandListResource ) );
+                        w, QSGRendererInterface::CommandListResource ) );
+
                 render_->mainPassRecordingStart( cb );
-                wnd->endExternalCommands();
+
+                w->endExternalCommands();
             },
             Qt::DirectConnection );
     }
-
     //render_->setViewportSize( window()->size() * window()->devicePixelRatio() );
 }
 

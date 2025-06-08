@@ -19,13 +19,12 @@ static constexpr bool DEBUG_OUTPUT_RENDERVK_CPP{ true };
 
 namespace tire {
 
-RenderVK::RenderVK( VkInstance instance, VkPhysicalDevice pDevice,
-                    VkDevice device, VkRenderPass rp ) {
-    context_ = std::make_unique<vk::Context>( instance, pDevice, device, rp );
-};
-
-void RenderVK::init() {
+void RenderVK::init( VkInstance instance, VkPhysicalDevice pDevice,
+                     VkDevice device, VkRenderPass rp ) {
     try {
+        context_ =
+            std::make_unique<vk::Context>( instance, pDevice, device, rp );
+
         piplineMatrixReady_ =
             std::make_unique<vk::PiplineMatrixReady>( context_.get() );
 
@@ -37,16 +36,13 @@ void RenderVK::init() {
         piplineMatrixReady_->initShaderStages( program );
         piplineMatrixReady_->buildPipeline();
 
+        clearValues_[0].color = { 0.0f, 0.0f, 1.0f, 0.0f };
+        clearValues_[1].depthStencil = { .depth = 0.0f, .stencil = 0 };
+
     } catch ( const std::runtime_error &e ) {
         throw std::runtime_error( e.what() );
     }
 }
-
-void RenderVK::frameStart() {
-    if ( !initialized_ ) {
-        init();
-    }
-};
 
 void RenderVK::mainPassRecordingStart( VkCommandBuffer cb ) {
     // Update global timer
@@ -63,13 +59,29 @@ void RenderVK::mainPassRecordingStart( VkCommandBuffer cb ) {
         25.0f );
     const auto viewMatrix = offset * proj;
     angle_ += timer_.floatFrameDuration() * 25.0f;
+    log::info( "{}", angle_ );
     algebra::vector3f ax{ 0.0f, 1.0f, 1.0f };
     ax.normalizeSelf();
     const auto modelMatrix = algebra::rotate( ax, angle_ );
     // =================================
 
+    const VkViewport viewport{
+        .x = 0.0f,
+        .y = 0.0f,
+        .width = static_cast<float>( context_->currentExtent().width ),
+        .height = static_cast<float>( context_->currentExtent().height ),
+        .minDepth = 0.0f,
+        .maxDepth = 1.0f };
+    vkCmdSetViewport( cb, 0, 1, &viewport );
+
+    const VkRect2D scissor{ { .x = 0, .y = 0 },
+                            { .width = context_->currentExtent().width,
+                              .height = context_->currentExtent().height } };
+    vkCmdSetScissor( cb, 0, 1, &scissor );
+
     vkCmdBindPipeline( cb, VK_PIPELINE_BIND_POINT_GRAPHICS,
                        piplineMatrixReady_->pipeline() );
+
     vkCmdPushConstants( cb, piplineMatrixReady_->layout(),
                         VK_SHADER_STAGE_VERTEX_BIT, 0,
                         sizeof( algebra::matrix4f ), &viewMatrix );

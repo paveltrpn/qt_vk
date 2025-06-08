@@ -107,6 +107,14 @@ struct matrix4 final {
                 ( *this )[i, j] = tmp;
             }
         }*/
+
+        for ( int i = 0; i < 4; ++i ) {
+            for ( int j = i + 1; j < 4; ++j ) {
+                int ij = i * 4 + j;
+                int ji = j * 4 + i;
+                std::swap( data_[ij], data_[ji] );
+            }
+        }
     }
 
     void multiply( const self &rhs ) {
@@ -162,6 +170,20 @@ struct matrix4 final {
                           this32 * rhs[2, 2] + ( *this )[3, 3] * rhs[3, 2];
         ( *this )[3, 3] = this30 * rhs[0, 3] + this31 * rhs[1, 3] +
                           this32 * rhs[2, 3] + ( *this )[3, 3] * rhs[3, 3];*/
+        std::array<T, 16> temp;
+
+        for ( int i = 0; i < 4; ++i ) {
+            for ( int j = 0; j < 4; ++j ) {
+                temp[i * 4 + j] = 0;
+                for ( int k = 0; k < 4; ++k ) {
+                    temp[i * 4 + j] += data_[i * 4 + k] * rhs[k * 4 + j];
+                }
+            }
+        }
+
+        for ( int i = 0; i < 16; ++i ) {
+            data_[i] = temp[i];
+        }
     }
 
     self &operator*( const self &rhs ) {
