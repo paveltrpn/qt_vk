@@ -8,8 +8,10 @@
 #include <QtQml>
 
 #include "theme_manager.h"
+#include "qt_items/render_item.h"
 
-namespace netpet {
+namespace tire {
+
 struct MainWindow final : QObject {
     explicit MainWindow( QObject *parent = nullptr );
 
@@ -27,9 +29,11 @@ private:
     QSettings *settings_;
 
     ThemeManager *theme_;
+    std::unique_ptr<RenderItem> renderItem_;
 
     QQmlEngine *engine_;
     QQmlComponent *component_;
     QQuickWindow *window_;
 };
-}  // namespace netpet
+
+}  // namespace tire

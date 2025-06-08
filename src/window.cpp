@@ -12,7 +12,7 @@
 
 #include "window.h"
 
-namespace netpet {
+namespace tire {
 
 MainWindow::MainWindow( QObject *parent )
     : QObject{ parent }
@@ -30,23 +30,24 @@ MainWindow::MainWindow( QObject *parent )
         QApplication::quit();
     } );
 
-    registerTypes();
-
     // engine_->addImportPath( );
+
+    renderItem_ = std::make_unique<tire::RenderItem>();
+
+    qmlRegisterSingletonInstance( "Tire", 1, 0, "Theme", theme_ );
+    qmlRegisterSingletonInstance( "Tire", 1, 0, "Render", renderItem_.get() );
 
     const auto mainQmlPath =
         workPath().path() + QDir::separator() + "qml/main.qml";
     component_ = new QQmlComponent( engine_, mainQmlPath,
                                     dynamic_cast<QObject *>( this ) );
 
-    if ( component_->status() == QQmlComponent::Status::Error ) {
-        std::cout << std::format( "component creation error: {}\n",
-                                  component_->errorString().toStdString() );
-    }
+    // if ( component_->status() == QQmlComponent::Status::Error ) {
+    // std::cout << std::format( "component creation error: {}\n",
+    // component_->errorString().toStdString() );
+    // }
 
-    const auto object = component_->create();
-
-    window_ = dynamic_cast<QQuickWindow *>( object );
+    window_ = dynamic_cast<QQuickWindow *>( component_->create() );
     if ( window_ == nullptr ) {
         std::cout << std::format( "MainWindow bad cast!\n" );
     }
@@ -54,10 +55,11 @@ MainWindow::MainWindow( QObject *parent )
     const auto restoredGeometry =
         settings_->value( "main_window_geometry", QRect( 300, 300, 640, 480 ) );
     window_->setGeometry( restoredGeometry.toRect() );
+
+    registerTypes();
 }
 
 void MainWindow::registerTypes() {
-    qmlRegisterSingletonInstance( "Tire", 1, 0, "Theme", theme_ );
 }
 
-}  // namespace netpet
+}  // namespace tire

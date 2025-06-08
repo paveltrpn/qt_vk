@@ -2,7 +2,7 @@
 #include <vector>
 
 #include "pipeline.h"
-#include "../../../log/log.h"
+#include "log/log.h"
 #include "vulkan/vulkan_core.h"
 #include "vulkan/vk_enum_string_helper.h"
 

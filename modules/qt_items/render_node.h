@@ -7,8 +7,6 @@
 namespace tire {
 
 struct RenderNode final : QSGRenderNode {
-    ~RenderNode();
-
     void render( const RenderState *state ) override;
     void releaseResources() override;
     QSGRenderNode::RenderingFlags flags() const override;

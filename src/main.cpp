@@ -8,11 +8,12 @@
 
 int main( int argc, char *argv[] ) {
     QGuiApplication app( argc, argv );
-    QGuiApplication::styleHints()->setStartDragDistance( 10 );
+
+    QQuickWindow::setGraphicsApi( QSGRendererInterface::Vulkan );
 
     std::cout << "Qt version: " << qVersion() << "\n";
 
-    auto *mainWindow = new netpet::MainWindow( &app );
-    Q_UNUSED( mainWindow )
+    [[maybe_unused]] auto *mainWindow = new tire::MainWindow( &app );
+
     return app.exec();
 }

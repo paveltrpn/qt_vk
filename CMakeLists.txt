@@ -24,7 +24,9 @@ find_package(Qt6 ${QT_VERSION} COMPONENTS
     Quick
     QuickWidgets
     QuickControls2
-    Qml)
+    Qml
+    Vulkan
+)
 
 # Module algebra
 # ================================
@@ -52,7 +54,7 @@ set_target_properties(log PROPERTIES LINKER_LANGUAGE CXX)
 file(GLOB_RECURSE MOD_RENDER_SRC "modules/render/*.cpp" "modules/render/*.h")
 add_library(render)
 target_sources(render PRIVATE ${MOD_RENDER_SRC})
-target_link_libraries(render algebra log)
+target_link_libraries(render vulkan algebra log)
 
 # Module qt_items
 # ================================
@@ -61,6 +63,8 @@ add_library(qt_items)
 set_target_properties(qt_items PROPERTIES AUTOMOC TRUE)
 target_sources(qt_items PRIVATE ${MOD_QT_ITEMS_SRC})
 target_link_libraries(qt_items
+    render
+    vulkan
     Qt::Core
     Qt::Gui
     Qt::Quick
@@ -79,6 +83,7 @@ target_link_libraries(${PROJECT_NAME}
     algebra
     render
     qt_items
+    vulkan
     Qt::Core
     Qt::Gui
     Qt::Quick

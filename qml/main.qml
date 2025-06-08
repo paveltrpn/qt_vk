@@ -28,6 +28,10 @@ ApplicationWindow {
 
     property bool isListUnfolded: false
 
+    Render {
+        id: renderer
+    }
+
     Rectangle {
         id: background
         anchors.fill: parent

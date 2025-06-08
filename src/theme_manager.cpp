@@ -5,7 +5,7 @@
 #include <QFile>
 #include <QJsonParseError>
 
-namespace netpet {
+namespace tire {
 
 ThemeManager::ThemeManager( const QDir &path, QObject *parent )
     : QObject{ parent } {
@@ -26,4 +26,4 @@ ThemeManager::ThemeManager( const QDir &path, QObject *parent )
     }
 }
 
-}  // namespace netpet
+}  // namespace tire

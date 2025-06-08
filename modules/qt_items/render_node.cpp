@@ -15,4 +15,7 @@ QSGRenderNode::RenderingFlags RenderNode::flags() const {
 QRectF RenderNode::rect() const {
 }
 
+void RenderNode::sync( QQuickItem *item ) {
+}
+
 }  // namespace tire

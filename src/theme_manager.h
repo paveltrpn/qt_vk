@@ -5,11 +5,12 @@
 #include <QJsonObject>
 #include <QDir>
 
-namespace netpet
-{
+namespace tire {
+
 struct ThemeManager final : QObject {
     Q_OBJECT
-    Q_PROPERTY( QJsonObject colors READ colors WRITE setColors MEMBER colors_ NOTIFY colorsChanged )
+    Q_PROPERTY( QJsonObject colors READ colors WRITE setColors MEMBER colors_
+                    NOTIFY colorsChanged )
 
 public:
     ThemeManager( const QDir &path, QObject *parent = nullptr );
@@ -23,4 +24,5 @@ signals:
 private:
     QJsonObject colors_{};
 };
-} // namespace netpet
+
+}  // namespace tire
