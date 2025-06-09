@@ -22,13 +22,16 @@ struct Pipeline;
 
 struct Context final {
     Context( VkInstance instance, VkPhysicalDevice pDevice, VkDevice device,
-             VkRenderPass rp );
+             VkSurfaceKHR surface, VkRenderPass rp );
     ~Context();
 
     Context( const Context& other ) = delete;
     Context( Context&& other ) = delete;
     Context& operator=( const Context& other ) = delete;
     Context& operator=( Context&& other ) = delete;
+
+    void queryDeviceInfo();
+    void querySurface();
 
     [[nodiscard]] VkInstance instance() const { return instance_; };
     [[nodiscard]] VkDevice device() const { return device_; };
@@ -44,7 +47,7 @@ struct Context final {
         const std::vector<VkFormat>& candidates, VkImageTiling tiling,
         VkFormatFeatureFlags features ) const;
 
-    //[[nodiscard]] uint32_t framesCount() const { return framesCount_; };
+    [[nodiscard]] uint32_t framesCount() const { return framesCount_; };
 
     // [[nodiscard]] const VkQueue& graphicsQueue() const {
     // return graphicsQueue_;
@@ -63,16 +66,29 @@ struct Context final {
     };
 
 private:
-    // void makeCommandPool();
-
-private:
+    // Instance
     VkInstance instance_{ VK_NULL_HANDLE };
+
+    // Physical device
     VkPhysicalDevice pDevice_{ VK_NULL_HANDLE };
+    VkPhysicalDeviceProperties pDeviceProperties_{};
+    VkPhysicalDeviceFeatures pDeviceFeatures_{};
+    std::vector<VkExtensionProperties> pDeviceExtensions_{};
+    std::vector<VkQueueFamilyProperties> queueFamilyProperties_{};
+
+    // Logical device
     VkDevice device_{ VK_NULL_HANDLE };
-    VkExtent2D currentExtent_{ 320, 240 };
+
+    // Surface
+    VkSurfaceKHR surface_{ VK_NULL_HANDLE };
+    VkSurfaceCapabilitiesKHR surfaceCapabilities_{};
+
+    // Render pass
     VkRenderPass renderPass_{ VK_NULL_HANDLE };
 
-    VkPhysicalDeviceProperties devProps_{};
+    VkExtent2D currentExtent_{ 320, 240 };
+
+    uint32_t framesCount_{ 3 };
 };
 
 }  // namespace tire::vk

@@ -17,7 +17,7 @@ struct RenderVK final {
     ~RenderVK() = default;
 
     void init( VkInstance instance, VkPhysicalDevice pDevice, VkDevice device,
-               VkRenderPass rp );
+               VkSurfaceKHR surface, VkRenderPass rp );
 
     void mainPassRecordingStart( VkCommandBuffer cb );
 

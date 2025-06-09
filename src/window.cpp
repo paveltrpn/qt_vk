@@ -9,6 +9,7 @@
 #include <QQuickWindow>
 #include <QStringLiteral>
 #include <QtQml>
+#include <QVulkanInstance>
 
 #include "window.h"
 
@@ -19,8 +20,6 @@ MainWindow::MainWindow( QQuickView *parent )
     , theme_{ new ThemeManager{ workPath(), this } }
 
 {
-    QQuickWindow::setGraphicsApi( QSGRendererInterface::Vulkan );
-
     std::cout << std::format( "start... work path: {}\n",
                               workPath().path().toStdString() );
 

@@ -20,10 +20,10 @@ static constexpr bool DEBUG_OUTPUT_RENDERVK_CPP{ true };
 namespace tire {
 
 void RenderVK::init( VkInstance instance, VkPhysicalDevice pDevice,
-                     VkDevice device, VkRenderPass rp ) {
+                     VkDevice device, VkSurfaceKHR surface, VkRenderPass rp ) {
     try {
-        context_ =
-            std::make_unique<vk::Context>( instance, pDevice, device, rp );
+        context_ = std::make_unique<vk::Context>( instance, pDevice, device,
+                                                  surface, rp );
 
         piplineMatrixReady_ =
             std::make_unique<vk::PiplineMatrixReady>( context_.get() );

@@ -42,9 +42,8 @@ void RenderItem::beforeRendering() {
         const auto inst =
             reinterpret_cast<QVulkanInstance *>( renderInterface_->getResource(
                 window_, QSGRendererInterface::VulkanInstanceResource ) );
-        if ( !inst ) {
-            qDebug() << "RenderItem !inst..";
-        }
+
+        const auto sface = inst->surfaceForWindow( window_ );
 
         const auto physDev = *reinterpret_cast<VkPhysicalDevice *>(
             renderInterface_->getResource(
@@ -58,7 +57,7 @@ void RenderItem::beforeRendering() {
             *reinterpret_cast<VkRenderPass *>( renderInterface_->getResource(
                 window_, QSGRendererInterface::RenderPassResource ) );
 
-        render_->init( inst->vkInstance(), physDev, dev, rp );
+        render_->init( inst->vkInstance(), physDev, dev, sface, rp );
 
         initialized_ = true;
     }
