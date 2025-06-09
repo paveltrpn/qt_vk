@@ -19,6 +19,8 @@ MainWindow::MainWindow( QQuickView *parent )
     , theme_{ new ThemeManager{ workPath(), this } }
 
 {
+    QQuickWindow::setGraphicsApi( QSGRendererInterface::Vulkan );
+
     std::cout << std::format( "start... work path: {}\n",
                               workPath().path().toStdString() );
 
@@ -39,11 +41,6 @@ MainWindow::MainWindow( QQuickView *parent )
         settings_->value( "main_window_geometry", QRect( 300, 300, 640, 480 ) );
 
     setGeometry( restoredGeometry.toRect() );
-
-    registerTypes();
-}
-
-void MainWindow::registerTypes() {
 }
 
 }  // namespace tire

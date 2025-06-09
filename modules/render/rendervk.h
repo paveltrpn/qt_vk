@@ -23,6 +23,12 @@ struct RenderVK final {
 
     void createGraphicsPipeline();
 
+    void setViewportSize( uint32_t width, uint32_t height ) {
+        if ( context_ ) {
+            context_->setExtent( { width, height } );
+        }
+    }
+
 private:
     std::unique_ptr<vk::Context> context_{};
 

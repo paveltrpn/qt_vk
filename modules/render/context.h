@@ -56,6 +56,8 @@ struct Context final {
     // return graphicsFamilyQueueId_;
     // };
 
+    void setExtent( VkExtent2D other ) { currentExtent_ = other; }
+
     [[nodiscard]] const VkExtent2D& currentExtent() const {
         return currentExtent_;
     };
@@ -67,7 +69,7 @@ private:
     VkInstance instance_{ VK_NULL_HANDLE };
     VkPhysicalDevice pDevice_{ VK_NULL_HANDLE };
     VkDevice device_{ VK_NULL_HANDLE };
-    VkExtent2D currentExtent_{ 1515, 1006 };
+    VkExtent2D currentExtent_{ 320, 240 };
     VkRenderPass renderPass_{ VK_NULL_HANDLE };
 
     VkPhysicalDeviceProperties devProps_{};

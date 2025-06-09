@@ -11,11 +11,11 @@ Item {
 
     Render {
         id: renderer
-        SequentialAnimation on t {
-            NumberAnimation { to: 1; duration: 2500; easing.type: Easing.InQuad }
-            NumberAnimation { to: 0; duration: 2500; easing.type: Easing.OutQuad }
-            loops: Animation.Infinite
+        NumberAnimation on t {
             running: true
+            from: 0
+            to: 1 << 63
+            loops: Animation.Infinite
         }
     }
 

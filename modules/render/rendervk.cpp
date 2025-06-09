@@ -59,7 +59,6 @@ void RenderVK::mainPassRecordingStart( VkCommandBuffer cb ) {
         25.0f );
     const auto viewMatrix = offset * proj;
     angle_ += timer_.floatFrameDuration() * 25.0f;
-    log::info( "{}", angle_ );
     algebra::vector3f ax{ 0.0f, 1.0f, 1.0f };
     ax.normalizeSelf();
     const auto modelMatrix = algebra::rotate( ax, angle_ );

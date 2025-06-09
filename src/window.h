@@ -18,8 +18,6 @@ struct MainWindow final : QQuickView {
 
     ~MainWindow() override = default;
 
-    void registerTypes();
-
     static QDir workPath() {
         auto wp = QDir{ QDir::currentPath() };
         wp.cdUp();
