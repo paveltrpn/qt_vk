@@ -9,7 +9,7 @@
 #include <QQuickView>
 
 #include "theme_manager.h"
-#include "qt_items/render_item.h"
+#include "render_item.h"
 
 namespace tire {
 

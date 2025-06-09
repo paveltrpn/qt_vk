@@ -5,9 +5,6 @@
 #include <expected>
 
 #include <vulkan/vulkan.h>
-
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
 #include <vulkan/vulkan_core.h>
 
 #define CONFIG_APPLAICATION_NAME "application_name"

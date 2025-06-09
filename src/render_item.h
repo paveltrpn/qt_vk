@@ -18,7 +18,7 @@ public:
 
     void sync();
     void cleanup();
-    qreal t() const { return t_; }
+    [[nodiscard]] qreal t() const { return t_; }
     void setT( qreal t );
 
 signals:
