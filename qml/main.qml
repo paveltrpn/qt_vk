@@ -5,7 +5,7 @@ import Tire 1.0
 import "components"
 
 Item {
-    id: netPetWnd
+    id: mainWindow
     readonly property var _fonts: Constants.fonts
     readonly property var _units: Constants.units
 
@@ -29,17 +29,17 @@ Item {
             // leftMargin: 500
         }
 
-        Item {
-            id: topDragArea
+        Rectangle {
             anchors {
-                top: background.top
-                left: background.left
-                right: background.right
+                top: parent.top
+                left: parent.left
+                right: parent.right
             }
-            height: 8
+            height: 24
+
+            color: "green"
 
             MouseArea {
-                id: topMouseRegion
                 anchors.fill: parent
                 property variant clickPos: "1,1"
 
@@ -51,90 +51,79 @@ Item {
                                        var delta = Qt.point(
                                            mouse.x - clickPos.x,
                                            mouse.y - clickPos.y)
-                                       netPetWnd.x += delta.x
-                                       netPetWnd.y += delta.y
+                                       //mainWindow.x += delta.x
+                                       //mainWindow.y += delta.y
+
                                    }
             }
         }
 
         Rectangle {
-            id: bottomDragArea
-            anchors {
-                bottom: background.bottom
-                left: background.left
-                right: background.right
-            }
-            height: 8
-            color: "transparent"
+            id: leftPanel
 
-            MouseArea {
-                id: bottomMouseRegion
-                anchors.fill: parent
-                property variant clickPos: "1,1"
+            height: reloadModelsButton.height + 32
+            width: reloadModelsButton.width + closeButton.width + 32
 
-                onPressed: mouse => {
-                               clickPos = Qt.point(mouse.x, mouse.y)
-                           }
+            x: 100
+            y: 100
 
-                onPositionChanged: mouse => {
-                                       var delta = Qt.point(
-                                           mouse.x - clickPos.x,
-                                           mouse.y - clickPos.y)
-                                       netPetWnd.x += delta.x
-                                       netPetWnd.y += delta.y
-                                   }
-            }
-        }
+            radius: 8
 
-        RowLayout {
-            id: mainLayout
+            color: Theme.colors["background"]
 
-            anchors {
-                fill: parent
-                topMargin: 16
-                bottomMargin: 16
-                leftMargin: 16
-                rightMargin: 16
-            }
-
-            spacing: 8
-            Rectangle {
-                id: leftPanel
-
-                height: background.height - 32
-                radius: 8
-
-                color: Theme.colors["background"]
-
-                Layout.fillHeight: true
-                Layout.preferredWidth: 95
-
-                NpButton {
-                    id: reloadModelsButton
-                    anchors {
-                        top: leftPanel.top
-                        topMargin: 16
-                        horizontalCenter: leftPanel.horizontalCenter
-                    }
-                    icon.source: "icons/exit_up.svg"
-                    onClicked: {
-                        LocalListModel.reload()
-                        LocalTreeModel.reload()
-                    }
+            NpButton {
+                id: reloadModelsButton
+                anchors {
+                    left: leftPanel.left
+                    leftMargin: 8
+                    bottom: leftPanel.bottom
+                    bottomMargin: 8
                 }
+                icon.source: "icons/exit_up.svg"
+                onClicked: {
+                    quickViewHandle.noop()
+                }
+            }
 
-                NpButton {
-                    id: closeButton
-                    anchors {
-                        bottom: leftPanel.bottom
-                        bottomMargin: 16
-                        horizontalCenter: leftPanel.horizontalCenter
-                    }
-                    icon.source: "icons/power.svg"
-                    onClicked: {
-                        // send QQmlEngine::quit()
-                        Qt.quit()
-                    }
+            NpButton {
+                id: closeButton
+                anchors {
+                    right: leftPanel.right
+                    rightMargin: 8
+                    bottom: leftPanel.bottom
+                    bottomMargin: 8
+                }
+                icon.source: "icons/power.svg"
+                onClicked: {
+                    // send QQmlEngine::quit()
+                    Qt.quit()
+                }
+            }
+
+            Item {
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                    right: parent.right
+                }
+                height: 24
+
+                MouseArea {
+                    id: topMouseRegion
+                    anchors.fill: parent
+                    property variant clickPos: "1,1"
+
+                    onPressed: mouse => {
+                                   clickPos = Qt.point(mouse.x, mouse.y)
+                               }
+
+                    onPositionChanged: mouse => {
+                                           var delta = Qt.point(
+                                               mouse.x - clickPos.x,
+                                               mouse.y - clickPos.y)
+                                           leftPanel.x += delta.x
+                                           leftPanel.y += delta.y
+                                       }
                 }
             }
         }

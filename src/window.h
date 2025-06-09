@@ -14,6 +14,9 @@
 namespace tire {
 
 struct MainWindow final : QQuickView {
+    Q_OBJECT
+
+public:
     explicit MainWindow( QQuickView *parent = nullptr );
 
     ~MainWindow() override = default;
@@ -24,10 +27,15 @@ struct MainWindow final : QQuickView {
         return wp;
     };
 
-private:
-    QSettings *settings_;
+    Q_INVOKABLE void noop() { log::info( "noop from main window" ); }
 
+private:
+    QQmlEngine *engine_;
+    QQmlContext *context_;
+    QSettings *settings_;
     ThemeManager *theme_;
+
+    RenderItem *renderer_{};
 };
 
 }  // namespace tire

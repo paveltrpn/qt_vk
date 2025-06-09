@@ -38,6 +38,7 @@ protected:
     VkPipeline pipeline_{ VK_NULL_HANDLE };
     VkPipelineLayout layout_{ VK_NULL_HANDLE };
     VkRenderPass renderPass_{ VK_NULL_HANDLE };
+    VkPipelineCache pipelineCache_{ VK_NULL_HANDLE };
 
     std::vector<VkPipelineShaderStageCreateInfo> shaderStages_{};
 };

@@ -21,6 +21,8 @@ public:
     [[nodiscard]] unsigned long long t() const { return t_; }
     void setT( unsigned long long t );
 
+    void noop() { log::info( "noop from render item" ); }
+
 public slots:
     void sync();
     void cleanup();
@@ -28,6 +30,7 @@ public slots:
 private:
     void handleWindowChanged( QQuickWindow *win );
 
+public slots:
     void beforeRendering();
     void beforeRenderPassRecording();
 

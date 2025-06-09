@@ -16,6 +16,7 @@ int main( int argc, char *argv[] ) {
 
     QVulkanInstance inst;
 
+    // NOTE: not have an effect.
     inst.setApiVersion( { 1, 3 } );
 
     if ( !inst.create() ) {

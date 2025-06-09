@@ -54,9 +54,10 @@ void RenderVK::mainPassRecordingStart( VkCommandBuffer cb ) {
     offset.transposeSelf();
 
     const auto [width, height] = context_->currentExtent();
-    const auto proj = algebra::vperspective<float>(
+    // NOTE: Choose right projection matrix!!!
+    const auto proj = algebra::perspective<float>(
         50.0f, static_cast<float>( width ) / static_cast<float>( height ), 0.1f,
-        25.0f );
+        100.0f );
     const auto viewMatrix = offset * proj;
     angle_ += timer_.floatFrameDuration() * 25.0f;
     algebra::vector3f ax{ 0.0f, 1.0f, 1.0f };

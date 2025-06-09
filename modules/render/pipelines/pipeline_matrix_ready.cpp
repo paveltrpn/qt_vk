@@ -1,4 +1,5 @@
 
+#include <cstring>
 #include "vulkan/vk_enum_string_helper.h"
 #include "pipeline.h"
 #include "log/log.h"
@@ -32,7 +33,7 @@ void PiplineMatrixReady::buildPipeline() {
         .rasterizerDiscardEnable = VK_FALSE,
         .polygonMode = VK_POLYGON_MODE_FILL,
         .cullMode = VK_CULL_MODE_NONE,
-        .frontFace = VK_FRONT_FACE_CLOCKWISE,
+        .frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE,
         .depthBiasEnable = VK_FALSE,
         .depthBiasConstantFactor = 0.0f,
         .depthBiasClamp = 0.0f,
@@ -103,6 +104,12 @@ void PiplineMatrixReady::buildPipeline() {
     depthStencil.front = {};
     depthStencil.back = {};
 
+    VkPipelineCacheCreateInfo pipelineCacheInfo;
+    memset( &pipelineCacheInfo, 0, sizeof( pipelineCacheInfo ) );
+    pipelineCacheInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+    vkCreatePipelineCache( context_->device(), &pipelineCacheInfo, nullptr,
+                           &pipelineCache_ );
+
     // Create pipeline
     const VkGraphicsPipelineCreateInfo pipelineInfo{
         .sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO,
@@ -123,7 +130,7 @@ void PiplineMatrixReady::buildPipeline() {
         .basePipelineIndex = -1 };
 
     if ( const auto err =
-             vkCreateGraphicsPipelines( context_->device(), VK_NULL_HANDLE, 1,
+             vkCreateGraphicsPipelines( context_->device(), pipelineCache_, 1,
                                         &pipelineInfo, nullptr, &pipeline_ );
          err != VK_SUCCESS ) {
         throw std::runtime_error(

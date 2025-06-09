@@ -33,27 +33,24 @@ QuickTemplates.Button {
     property color textColor: Theme.colors["main_contrast"]
 
     // icon.color: textColor
-    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
-                            implicitContentWidth + leftPadding + rightPadding)
-    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
-                             implicitContentHeight + topPadding + bottomPadding)
+    // implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+    // implicitContentWidth + leftPadding + rightPadding)
+    // implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
+    // implicitContentHeight + topPadding + bottomPadding)
+    width: 40
+    height: 40
 
     topPadding: 4
     bottomPadding: 4
+    leftPadding: 4
+    rightPadding: 4
 
-    // leftPadding: 16
-    // rightPadding: 16
-    spacing: 8
-
+    // spacing: 8
     background: Rectangle {
         id: backgroundItem
-
-        implicitWidth: 56
-        implicitHeight: 56
-
+        anchors.fill: parent
         color: control.backgroundColor
         opacity: control.enabled ? 1.0 : 0.3
-
         radius: 8
     }
 
