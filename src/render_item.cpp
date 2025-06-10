@@ -20,12 +20,12 @@ void RenderItem::handleWindowChanged( QQuickWindow *win ) {
         connect( win, &QQuickWindow::sceneGraphInvalidated, this,
                  &RenderItem::cleanup, Qt::DirectConnection );
 
-        win->setColor( Qt::black );
+        win->setColor( "#0c0c1c" );
     }
 }
 
 void RenderItem::cleanup() {
-    qDebug() << "RenderItem cleanup..";
+    log::info( "RenderItem === cleanup.." );
 }
 
 void RenderItem::setT( unsigned long long t ) {
@@ -39,6 +39,10 @@ void RenderItem::setT( unsigned long long t ) {
 
 void RenderItem::beforeRendering() {
     if ( !initialized_ ) {
+        // Acquire vulkan resurces, initialized by Qt and provided
+        // by QRhi interface and window.
+        // This resources accumulated in vk::Context object
+        // and used by vk::Render.
         const auto inst =
             reinterpret_cast<QVulkanInstance *>( renderInterface_->getResource(
                 window_, QSGRendererInterface::VulkanInstanceResource ) );
@@ -69,11 +73,13 @@ void RenderItem::beforeRenderPassRecording() {
     // Must query the command buffer _after_ beginExternalCommands(), this is
     // actually important when running on Vulkan because what we get here is a
     // new secondary command buffer, not the primary one.
+    // This object has limited validity, and is only valid while the scene
+    // graph is preparing the next frame.
     const auto cb =
         *reinterpret_cast<VkCommandBuffer *>( renderInterface_->getResource(
             window_, QSGRendererInterface::CommandListResource ) );
 
-    render_->mainPassRecordingStart( cb );
+    render_->frame( cb );
 
     window_->endExternalCommands();
 }
@@ -94,18 +100,16 @@ void RenderItem::sync() {
 
         // Initializing resources is done before starting to record the
         // renderpass, regardless of wanting an underlay or overlay.
+        // Most of vulkan resources already allocated by Qt at this point.
         connect( window_, &QQuickWindow::beforeRendering, this,
                  &RenderItem::beforeRendering, Qt::DirectConnection );
 
         // Here we want an underlay and therefore connect to
         // beforeRenderPassRecording. Changing to afterRenderPassRecording
-        // would render the squircle on top (overlay).
+        // would render on top (overlay).
         connect( window_, &QQuickWindow::beforeRenderPassRecording, this,
                  &RenderItem::beforeRenderPassRecording, Qt::DirectConnection );
     }
-
-    const auto sz = window()->size() * window()->devicePixelRatio();
-    render_->setViewportSize( sz.width(), sz.height() );
 }
 
 }  // namespace tire

@@ -10,6 +10,7 @@
 #include <QStringLiteral>
 #include <QtQml>
 
+#include "log/log.h"
 #include "window.h"
 
 namespace tire {
@@ -18,45 +19,122 @@ MainWindow::MainWindow( QQuickView *parent )
     : QQuickView{ parent }
     , engine_{ engine() }
     , context_{ rootContext() }
+    , settings_{ new QSettings(
+          workPath().path() + QDir::separator() + "settings.ini",
+          QSettings::NativeFormat, this ) }
     , theme_{ new ThemeManager{ workPath(), this } }
 
 {
-    std::cout << std::format( "start... work path: {}\n",
-                              workPath().path().toStdString() );
+    QSGRendererInterface *rif = this->rendererInterface();
+    // We are not prepared for anything other than running with the RHI and its Vulkan backend.
+    if ( rif->graphicsApi() != QSGRendererInterface::Vulkan ) {
+        log::fatal(
+            "MainWindow === qt render backend based not on Vulkan api!" );
+    } else {
+        log::info( "MainWindow === qt render backend assert success" );
+    }
 
-    // NOTE:
-    setFlag( Qt::FramelessWindowHint, true );
+    log::info( "MainWindow === start... work path: {}",
+               workPath().path().toStdString() );
 
-    settings_ =
-        new QSettings( workPath().path() + QDir::separator() + "settings.ini",
-                       QSettings::NativeFormat, this );
-
-    connect( engine_, &QQmlEngine::quit, this, [this]() {
-        log::info( "quit" );
-        renderer_->noop();
-        settings_->setValue( "main_window_geometry", geometry() );
-        QApplication::quit();
-    } );
-
+    // Configure main window.
     setResizeMode( QQuickView::SizeRootObjectToView );
 
+    // Actions that must be processed before main QML component created.
     qmlRegisterSingletonInstance( "Tire", 1, 0, "Theme", theme_ );
     qmlRegisterType<RenderItem>( "Tire", 1, 0, "Render" );
 
     // Pass this pointer to qml.
-    context_->setContextProperty( "quickViewHandle", this );
+    context_->setContextProperty( "mainQuickViewHandle", this );
 
-    const auto mainQmlPath =
-        workPath().path() + QDir::separator() + "qml/main.qml";
-    setSource( QUrl( mainQmlPath ) );
+    // Load main QML component.
+    connect(
+        this, &QQuickView::statusChanged, this,
+        [this]( QQuickView::Status status ) {
+            switch ( status ) {
+                case QQuickView::Error: {
+                    log::fatal(
+                        "MainWindow === main QML component "
+                        "error!" );
+                    break;
+                }
+                case QQuickView::Loading: {
+                    log::info(
+                        "MainWindow === main QML component loading... " );
+                    break;
+                }
+                case QQuickView::Ready: {
+                    log::info( "MainWindow === main QML component ready." );
 
+                    // Get main renderer handle from QML. Is it need to be
+                    // done asynchronous only after QQuickView::statusChanged
+                    // signal?
+                    renderItemHandle_ = rootObject()->findChild<RenderItem *>();
+                    if ( !renderItemHandle_ ) {
+                        log::warning(
+                            "MainWindow === can't acquire renderer "
+                            "handle!" );
+                    }
+
+                    break;
+                }
+                case QQuickView::Null: {
+                    log::warning(
+                        "MainWindow === main QML component is NULL." );
+                    break;
+                }
+            }
+        } );
+    setSource( QUrl( workPath().path() + QDir::separator() + "qml/main.qml" ) );
+
+    // Deal with with main window geometry.
     const auto restoredGeometry =
         settings_->value( "main_window_geometry", QRect( 300, 300, 640, 480 ) );
-
     setGeometry( restoredGeometry.toRect() );
 
-    renderer_ =
-        dynamic_cast<RenderItem *>( context_->objectForName( "renderer" ) );
+    // Process quit actions.
+    connect( engine_, &QQmlEngine::quit, this,
+             [this]() { QApplication::quit(); } );
+}
+
+void MainWindow::closeEvent( QCloseEvent *ev ) {
+    log::info( "quit" );
+
+    // NOTE: renderer object is still alive here!
+    renderItemHandle_->noop();
+
+    // Save window geometry at close.
+    settings_->setValue( "main_window_geometry", geometry() );
+}
+
+void MainWindow::keyPressEvent( QKeyEvent *ev ) {
+    switch ( ev->key() ) {
+        case Qt::Key_Escape: {
+            QApplication::quit();
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+}
+
+void MainWindow::keyReleaseEvent( QKeyEvent *ev ) {
+}
+
+void MainWindow::mouseMoveEvent( QMouseEvent *ev ) {
+}
+
+void MainWindow::mousePressEvent( QMouseEvent *ev ) {
+}
+
+void MainWindow::mouseReleaseEvent( QMouseEvent *ev ) {
+}
+
+void MainWindow::resizeEvent( QResizeEvent *ev ) {
+    qDebug() << ev->size();
+
+    if ( renderItemHandle_ ) renderItemHandle_->updateSurface();
 }
 
 }  // namespace tire

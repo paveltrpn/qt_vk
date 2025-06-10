@@ -59,10 +59,8 @@ struct Context final {
     // return graphicsFamilyQueueId_;
     // };
 
-    void setExtent( VkExtent2D other ) { currentExtent_ = other; }
-
     [[nodiscard]] const VkExtent2D& currentExtent() const {
-        return currentExtent_;
+        return surfaceCapabilities_.currentExtent;
     };
 
 private:
@@ -86,9 +84,7 @@ private:
     // Render pass
     VkRenderPass renderPass_{ VK_NULL_HANDLE };
 
-    VkExtent2D currentExtent_{ 320, 240 };
-
-    uint32_t framesCount_{ 3 };
+    uint32_t framesCount_{ CONFIG_FRAMES_COUNT };
 };
 
 }  // namespace tire::vk

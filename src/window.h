@@ -28,6 +28,18 @@ public:
     };
 
     Q_INVOKABLE void noop() { log::info( "noop from main window" ); }
+    Q_INVOKABLE void move( int dx, int dy ) {
+        const auto nowPos = position();
+        setPosition( nowPos.x() + dx, nowPos.y() + dy );
+    }
+
+    void closeEvent( QCloseEvent *ev ) override;
+    void keyPressEvent( QKeyEvent *ev ) override;
+    void keyReleaseEvent( QKeyEvent *ev ) override;
+    void mouseMoveEvent( QMouseEvent *ev ) override;
+    void mousePressEvent( QMouseEvent *ev ) override;
+    void mouseReleaseEvent( QMouseEvent *ev ) override;
+    void resizeEvent( QResizeEvent *ev ) override;
 
 private:
     QQmlEngine *engine_;
@@ -35,7 +47,7 @@ private:
     QSettings *settings_;
     ThemeManager *theme_;
 
-    RenderItem *renderer_{};
+    RenderItem *renderItemHandle_{};
 };
 
 }  // namespace tire

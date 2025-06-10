@@ -6,17 +6,18 @@
 #include <QVulkanInstance>
 
 #include "window.h"
+#include "log/log.h"
 
 int main( int argc, char *argv[] ) {
     QGuiApplication app( argc, argv );
 
-    std::cout << "Qt version: " << qVersion() << "\n";
+    tire::log::info( "Qt version: {}", qVersion() );
 
     QQuickWindow::setGraphicsApi( QSGRendererInterface::Vulkan );
 
     QVulkanInstance inst;
 
-    // NOTE: not have an effect.
+    // NOTE: have no effect.
     inst.setApiVersion( { 1, 3 } );
 
     if ( !inst.create() ) {
@@ -24,7 +25,7 @@ int main( int argc, char *argv[] ) {
         return 1;
     }
 
-    tire::MainWindow view;
+    tire::MainWindow view{};
     view.setVulkanInstance( &inst );
     view.show();
 

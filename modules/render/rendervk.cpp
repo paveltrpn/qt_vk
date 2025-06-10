@@ -44,7 +44,7 @@ void RenderVK::init( VkInstance instance, VkPhysicalDevice pDevice,
     }
 }
 
-void RenderVK::mainPassRecordingStart( VkCommandBuffer cb ) {
+void RenderVK::frame( VkCommandBuffer cb ) {
     // Update global timer
     timer_.update();
 

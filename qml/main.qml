@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
+import Qt5Compat.GraphicalEffects
 import Tire 1.0
 import "components"
 
@@ -8,9 +9,14 @@ Item {
     id: mainWindow
     readonly property var _fonts: Constants.fonts
     readonly property var _units: Constants.units
+    property string foo: "foo"
 
+    // =====================================================
+    // RenderItem instance that holds vk::Context and
+    // vk::Render objects. Pointer to this object
+    // available in main application.
     Render {
-        id: renderer
+        id: mainRenderItem
         NumberAnimation on t {
             running: true
             from: 0
@@ -18,6 +24,7 @@ Item {
             loops: Animation.Infinite
         }
     }
+    // =====================================================
 
     Item {
         id: background
@@ -26,19 +33,41 @@ Item {
             right: parent.right
             top: parent.top
             bottom: parent.bottom
-            // leftMargin: 500
         }
 
         Rectangle {
+            id: mainWindowDragArea
             anchors {
                 top: parent.top
-                left: parent.left
                 right: parent.right
             }
-            height: 24
+            width: 64
+            height: 64
 
-            color: "green"
+            color: Theme.colors["background_additional_40"]
 
+
+            /*
+            Image {
+                id: mainWindowDragIcon
+                anchors.centerIn: parent
+                source: "icons/arrow_all_direction_01.svg"
+                sourceSize: Qt.size(
+                                mainWindowDragIconHiddenImg.sourceSize.width * 2,
+                                mainWindowDragIconHiddenImg.sourceSize.height * 2)
+                Image {
+                    id: mainWindowDragIconHiddenImg
+                    source: parent.source
+                    width: 0
+                    height: 0
+                }
+                ColorOverlay {
+                    anchors.fill: mainWindowDragIcon
+                    source: mainWindowDragIcon
+                    color: "white"
+                }
+            }
+            */
             MouseArea {
                 anchors.fill: parent
                 property variant clickPos: "1,1"
@@ -53,7 +82,7 @@ Item {
                                            mouse.y - clickPos.y)
                                        //mainWindow.x += delta.x
                                        //mainWindow.y += delta.y
-
+                                       mainQuickViewHandle.move(delta.x, delta.y)
                                    }
             }
         }
@@ -81,7 +110,7 @@ Item {
                 }
                 icon.source: "icons/exit_up.svg"
                 onClicked: {
-                    quickViewHandle.noop()
+                    mainQuickViewHandle.noop()
                 }
             }
 

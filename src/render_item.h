@@ -23,6 +23,10 @@ public:
 
     void noop() { log::info( "noop from render item" ); }
 
+    void updateSurface() {
+        if ( render_ ) render_->updateSurface();
+    }
+
 public slots:
     void sync();
     void cleanup();

@@ -19,13 +19,13 @@ struct RenderVK final {
     void init( VkInstance instance, VkPhysicalDevice pDevice, VkDevice device,
                VkSurfaceKHR surface, VkRenderPass rp );
 
-    void mainPassRecordingStart( VkCommandBuffer cb );
+    void frame( VkCommandBuffer cb );
 
     void createGraphicsPipeline();
 
-    void setViewportSize( uint32_t width, uint32_t height ) {
+    void updateSurface() {
         if ( context_ ) {
-            context_->setExtent( { width, height } );
+            context_->querySurface();
         }
     }
 
