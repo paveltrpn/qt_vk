@@ -89,13 +89,12 @@ void RenderItem::beforeRendering() {
                 QSGRendererInterface::GraphicsQueueFamilyIndexResource ) );
 
         // Graphics queue index.
-        // NOTE: or VkQueue???
-        const auto gq =
-            *reinterpret_cast<VkQueue *>( renderInterface_->getResource(
+        const auto gqi =
+            *reinterpret_cast<uint32_t *>( renderInterface_->getResource(
                 window_, QSGRendererInterface::GraphicsQueueIndexResource ) );
 
         context_ = std::make_unique<vk::Context>( inst->vkInstance(), physDev,
-                                                  dev, sface, rp, gqfi );
+                                                  dev, sface, rp, gqfi, gqi );
 
         emit contextinitialized();
 

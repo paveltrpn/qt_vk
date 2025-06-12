@@ -23,7 +23,8 @@ struct Pipeline;
 
 struct Context final {
     Context( VkInstance instance, VkPhysicalDevice pDevice, VkDevice device,
-             VkSurfaceKHR surface, VkRenderPass rp, uint32_t gqfi );
+             VkSurfaceKHR surface, VkRenderPass rp, uint32_t gqfi,
+             uint32_t gqi );
     ~Context();
 
     Context( const Context& other ) = delete;
@@ -100,7 +101,10 @@ private:
     // Render pass
     VkRenderPass renderPass_{ VK_NULL_HANDLE };
 
+    // Graphics queue resources.
     uint32_t graphicsFamilyQueueId_{};
+    uint32_t graphicsQueueId_{};
+    VkQueue graphicsQueue_{};
 
     uint32_t framesCount_{ CONFIG_FRAMES_COUNT };
 };

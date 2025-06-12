@@ -12,13 +12,14 @@ namespace tire::vk {
 
 Context::Context( VkInstance instance, VkPhysicalDevice pDevice,
                   VkDevice device, VkSurfaceKHR surface, VkRenderPass rp,
-                  uint32_t gqfi )
+                  uint32_t gqfi, uint32_t gqi )
     : instance_{ instance }
     , pDevice_{ pDevice }
     , device_{ device }
     , surface_{ surface }
     , renderPass_{ rp }
-    , graphicsFamilyQueueId_{ gqfi } {
+    , graphicsFamilyQueueId_{ gqfi }
+    , graphicsQueueId_{ gqi } {
     uint32_t version{};
     vkEnumerateInstanceVersion( &version );
     log::info( "vk::Context === acquired api instance version is {}.{}",
@@ -27,6 +28,10 @@ Context::Context( VkInstance instance, VkPhysicalDevice pDevice,
 
     queryDeviceInfo();
     querySurface();
+
+    // Graphic and present queue id
+    vkGetDeviceQueue( device_, graphicsFamilyQueueId_, graphicsQueueId_,
+                      &graphicsQueue_ );
 }
 
 auto Context::queryDeviceInfo() -> void {
@@ -98,8 +103,9 @@ auto Context::querySurface() -> void {
     }
 }
 
-uint32_t Context::memoryRequirements( uint32_t typeFilter,
-                                      VkMemoryPropertyFlags properties ) const {
+auto Context::memoryRequirements( uint32_t typeFilter,
+                                  VkMemoryPropertyFlags properties ) const
+    -> uint32_t {
     VkPhysicalDeviceMemoryProperties memProperties{};
     vkGetPhysicalDeviceMemoryProperties( pDevice_, &memProperties );
 
@@ -117,9 +123,10 @@ uint32_t Context::memoryRequirements( uint32_t typeFilter,
     return {};
 }
 
-VkFormat Context::findSupportedFormat( const std::vector<VkFormat> &candidates,
-                                       VkImageTiling tiling,
-                                       VkFormatFeatureFlags features ) const {
+auto Context::findSupportedFormat( const std::vector<VkFormat> &candidates,
+                                   VkImageTiling tiling,
+                                   VkFormatFeatureFlags features ) const
+    -> VkFormat {
     for ( VkFormat format : candidates ) {
         VkFormatProperties props;
         vkGetPhysicalDeviceFormatProperties( pDevice_, format, &props );
