@@ -23,6 +23,7 @@ list(APPEND CMAKE_PREFIX_PATH $ENV{LOCAL_LATEST_QT})
 find_package(Qt6 ${QT_VERSION} COMPONENTS
     Core
     Gui
+    GuiPrivate
     Quick
     QuickWidgets
     QuickControls2
@@ -68,6 +69,7 @@ target_link_libraries(${PROJECT_NAME}
     render
     Qt::Core
     Qt::Gui
+    Qt6::GuiPrivate
     Qt::Quick
     Qt::QuickWidgets
     Qt::QuickControls2

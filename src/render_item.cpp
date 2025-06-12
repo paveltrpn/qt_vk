@@ -1,6 +1,7 @@
 
 #include <QQuickWindow>
 #include <QVulkanInstance>
+#include <rhi/qrhi.h>
 
 #include "render_item.h"
 
@@ -35,11 +36,8 @@ void RenderItem::cleanup() {
 }
 
 void RenderItem::setT( unsigned long long t ) {
-    if ( t == t_ ) return;
-    t_ = t;
-    emit tChanged();
-    if ( window() ) {
-        window()->update();
+    if ( window_ ) {
+        window_->update();
     }
 }
 
@@ -50,15 +48,25 @@ void RenderItem::beforeRendering() {
         // This resources accumulated in vk::Context object
         // and used by vk::Render.
 
+        const auto rhiHandle =
+            reinterpret_cast<QRhi *>( renderInterface_->getResource(
+                window_, QSGRendererInterface::RhiResource ) );
+
+        qDebug() << rhiHandle->driverInfo();
+
+        const auto nh = static_cast<const QRhiVulkanNativeHandles *>(
+            rhiHandle->nativeHandles() );
+
+        const auto inst = nh->inst;
+
         // Vulkan instance.
-        const auto inst =
-            reinterpret_cast<QVulkanInstance *>( renderInterface_->getResource(
-                window_, QSGRendererInterface::VulkanInstanceResource ) );
+        // const auto inst =
+        // reinterpret_cast<QVulkanInstance *>( renderInterface_->getResource(
+        // window_, QSGRendererInterface::VulkanInstanceResource ) );
 
         // VkSurfaceKHR assiciated with Qt window.
         const auto sface = inst->surfaceForWindow( window_ );
 
-        // const pDevsCount = window_->
         // Chosen physical device.
         const auto physDev = *reinterpret_cast<VkPhysicalDevice *>(
             renderInterface_->getResource(

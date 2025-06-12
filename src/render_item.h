@@ -3,6 +3,7 @@
 
 #include <QSGRendererInterface>
 #include <QQuickItem>
+#include <rhi/qrhi.h>
 
 #include <vulkan/vulkan.h>
 
@@ -54,12 +55,20 @@ private:
     // assined to. Is this pointers valid through all
     // window lifetime?
     QQuickWindow *window_{};
+
+    // The ownership of the  pointer returned from render interface
+    // is never transferred to the caller.
     QSGRendererInterface *renderInterface_{};
+
+    // Native QRhi render hardware interface handle.
+    QRhi *rhiHandle{};
 
     std::unique_ptr<vk::Context> context_{ nullptr };
     std::unique_ptr<vk::Render> render_{ nullptr };
 
     // Animation (i.e. frame update on main loop) depends on this.
+    // We don't care about t_ value itself, it only used to
+    // window updete event keep going.
     unsigned long long t_{};
 };
 
