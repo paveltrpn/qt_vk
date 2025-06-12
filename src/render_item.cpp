@@ -57,9 +57,10 @@ void RenderItem::beforeRendering() {
         const auto nh = static_cast<const QRhiVulkanNativeHandles *>(
             rhiHandle->nativeHandles() );
 
+        // Vulkan instance from QRhi.
         const auto inst = nh->inst;
 
-        // Vulkan instance.
+        // Vulkan instance from window.
         // const auto inst =
         // reinterpret_cast<QVulkanInstance *>( renderInterface_->getResource(
         // window_, QSGRendererInterface::VulkanInstanceResource ) );

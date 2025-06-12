@@ -29,7 +29,7 @@ Context::Context( VkInstance instance, VkPhysicalDevice pDevice,
     queryDeviceInfo();
     querySurface();
 
-    // Graphic and present queue id
+    // Graphic queue.
     vkGetDeviceQueue( device_, graphicsFamilyQueueId_, graphicsQueueId_,
                       &graphicsQueue_ );
 }
