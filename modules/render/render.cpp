@@ -19,16 +19,14 @@ static constexpr bool DEBUG_OUTPUT_RENDERVK_CPP{ true };
 
 namespace tire::vk {
 
-void Render::init( VkInstance instance, VkPhysicalDevice pDevice,
-                     VkDevice device, VkSurfaceKHR surface, VkRenderPass rp ) {
+void Render::init( vk::Context *context ) {
     try {
-        context_ = std::make_unique<vk::Context>( instance, pDevice, device,
-                                                  surface, rp );
+        context_ = context;
 
         piplineMatrixReady_ =
-            std::make_unique<vk::PiplineMatrixReady>( context_.get() );
+            std::make_unique<vk::PiplineMatrixReady>( context_ );
 
-        auto program = vk::Program{ context_.get() };
+        auto program = vk::Program{ context_ };
         program.fill(
             { { vk::vk_simple_box_VERTEX, vk::vertex_stage_suffix },
               { vk::vk_simple_box_FRAGMENT, vk::fragment_stage_suffix } } );
@@ -93,4 +91,4 @@ void Render::frame( VkCommandBuffer cb ) {
     vkCmdDraw( cb, 36, 3, 0, 0 );
 };
 
-}  // namespace tire
+}  // namespace tire::vk

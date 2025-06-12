@@ -24,7 +24,7 @@ public:
     void noop() { log::info( "noop from render item" ); }
 
     void updateSurface() {
-        if ( render_ ) render_->updateSurface();
+        if ( context_ ) context_->querySurface();
     }
 
 public slots:
@@ -45,12 +45,13 @@ private:
     bool initialized_{ false };
 
     // Cached window and render interface that this item
-    // assined to. Is this pointers valid trough all
+    // assined to. Is this pointers valid through all
     // window lifetime?
     QQuickWindow *window_{};
     QSGRendererInterface *renderInterface_{};
 
-    vk::Render *render_{ nullptr };
+    std::unique_ptr<vk::Context> context_{ nullptr };
+    std::unique_ptr<vk::Render> render_{ nullptr };
 
     unsigned long long t_{};
 };

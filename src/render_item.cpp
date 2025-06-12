@@ -61,7 +61,10 @@ void RenderItem::beforeRendering() {
             *reinterpret_cast<VkRenderPass *>( renderInterface_->getResource(
                 window_, QSGRendererInterface::RenderPassResource ) );
 
-        render_->init( inst->vkInstance(), physDev, dev, sface, rp );
+        context_ = std::make_unique<vk::Context>( inst->vkInstance(), physDev,
+                                                  dev, sface, rp );
+
+        render_->init( context_.get() );
 
         initialized_ = true;
     }
@@ -85,18 +88,18 @@ void RenderItem::beforeRenderPassRecording() {
 }
 
 void RenderItem::sync() {
-    window_ = window();
-    if ( !window_ ) {
-        qDebug() << "RenderItem === bad qquickitem window...";
-    }
-
-    renderInterface_ = window_->rendererInterface();
-    if ( !renderInterface_ ) {
-        qDebug() << "RenderItem === bad qquickitem render interface...";
-    }
-
     if ( !render_ ) {
-        render_ = new vk::Render{};
+        window_ = window();
+        if ( !window_ ) {
+            qDebug() << "RenderItem === bad qquickitem window...";
+        }
+
+        renderInterface_ = window_->rendererInterface();
+        if ( !renderInterface_ ) {
+            qDebug() << "RenderItem === bad qquickitem render interface...";
+        }
+
+        render_ = std::make_unique<vk::Render>();
 
         // Initializing resources is done before starting to record the
         // renderpass, regardless of wanting an underlay or overlay.

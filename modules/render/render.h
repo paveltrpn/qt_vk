@@ -16,21 +16,14 @@ struct Render final {
     Render() = default;
     ~Render() = default;
 
-    void init( VkInstance instance, VkPhysicalDevice pDevice, VkDevice device,
-               VkSurfaceKHR surface, VkRenderPass rp );
+    void init( vk::Context *context );
 
     void frame( VkCommandBuffer cb );
 
     void createGraphicsPipeline();
 
-    void updateSurface() {
-        if ( context_ ) {
-            context_->querySurface();
-        }
-    }
-
 private:
-    std::unique_ptr<vk::Context> context_{};
+    vk::Context *context_{};
 
     std::unique_ptr<vk::Pipeline> piplineMatrixReady_{};
 
@@ -44,4 +37,4 @@ private:
     std::array<VkClearValue, 2> clearValues_{};
 };
 
-}  // namespace tire
+}  // namespace tire::vk
