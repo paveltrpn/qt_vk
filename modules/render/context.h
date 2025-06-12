@@ -22,7 +22,7 @@ struct Pipeline;
 
 struct Context final {
     Context( VkInstance instance, VkPhysicalDevice pDevice, VkDevice device,
-             VkSurfaceKHR surface, VkRenderPass rp );
+             VkSurfaceKHR surface, VkRenderPass rp, uint32_t gqfi );
     ~Context();
 
     Context( const Context& other ) = delete;
@@ -30,24 +30,28 @@ struct Context final {
     Context& operator=( const Context& other ) = delete;
     Context& operator=( Context&& other ) = delete;
 
-    void queryDeviceInfo();
-    void querySurface();
+    auto queryDeviceInfo() -> void;
+    auto querySurface() -> void;
 
-    [[nodiscard]] VkInstance instance() const { return instance_; };
-    [[nodiscard]] VkDevice device() const { return device_; };
-    [[nodiscard]] VkRenderPass renderPass() const { return renderPass_; };
+    [[nodiscard]] auto instance() const -> VkInstance { return instance_; };
+    [[nodiscard]] auto device() const -> VkDevice { return device_; };
+    [[nodiscard]] auto renderPass() const -> VkRenderPass {
+        return renderPass_;
+    };
 
     // [[nodiscard]] const VkSurfaceFormatKHR& surfaceFormat() const {
     // return surfaceFormat_;
     // };
 
-    [[nodiscard]] uint32_t memoryRequirements(
-        uint32_t typeFilter, VkMemoryPropertyFlags properties ) const;
-    [[nodiscard]] VkFormat findSupportedFormat(
-        const std::vector<VkFormat>& candidates, VkImageTiling tiling,
-        VkFormatFeatureFlags features ) const;
+    [[nodiscard]] auto memoryRequirements(
+        uint32_t typeFilter, VkMemoryPropertyFlags properties ) const
+        -> uint32_t;
 
-    [[nodiscard]] uint32_t framesCount() const { return framesCount_; };
+    [[nodiscard]] auto findSupportedFormat(
+        const std::vector<VkFormat>& candidates, VkImageTiling tiling,
+        VkFormatFeatureFlags features ) const -> VkFormat;
+
+    [[nodiscard]] auto framesCount() const -> uint32_t { return framesCount_; };
 
     // [[nodiscard]] const VkQueue& graphicsQueue() const {
     // return graphicsQueue_;
@@ -55,11 +59,11 @@ struct Context final {
 
     //[[nodiscard]] VkQueue presentQueue() const { return presentQueue_; };
 
-    // [[nodiscard]] uint32_t graphicsFamily() const {
-    // return graphicsFamilyQueueId_;
-    // };
+    [[nodiscard]] auto graphicsFamily() const -> uint32_t {
+        return graphicsFamilyQueueId_;
+    };
 
-    [[nodiscard]] const VkExtent2D& currentExtent() const {
+    [[nodiscard]] auto currentExtent() const -> const VkExtent2D& {
         return surfaceCapabilities_.currentExtent;
     };
 
@@ -83,6 +87,8 @@ private:
 
     // Render pass
     VkRenderPass renderPass_{ VK_NULL_HANDLE };
+
+    uint32_t graphicsFamilyQueueId_{};
 
     uint32_t framesCount_{ CONFIG_FRAMES_COUNT };
 };

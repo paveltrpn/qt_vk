@@ -41,6 +41,9 @@ public slots:
 signals:
     void tChanged();
 
+    void contextinitialized();
+    void renderInitialized();
+
 private:
     bool initialized_{ false };
 

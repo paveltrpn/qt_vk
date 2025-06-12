@@ -11,12 +11,14 @@ static constexpr bool DEBUG_OUTPUT_CONTEXT_CPP{ true };
 namespace tire::vk {
 
 Context::Context( VkInstance instance, VkPhysicalDevice pDevice,
-                  VkDevice device, VkSurfaceKHR surface, VkRenderPass rp )
+                  VkDevice device, VkSurfaceKHR surface, VkRenderPass rp,
+                  uint32_t gqfi )
     : instance_{ instance }
     , pDevice_{ pDevice }
     , device_{ device }
     , surface_{ surface }
-    , renderPass_{ rp } {
+    , renderPass_{ rp }
+    , graphicsFamilyQueueId_{ gqfi } {
     uint32_t version{};
     vkEnumerateInstanceVersion( &version );
     log::info( "vk::Context === acquired api instance version is {}.{}",
@@ -27,7 +29,7 @@ Context::Context( VkInstance instance, VkPhysicalDevice pDevice,
     querySurface();
 }
 
-void Context::queryDeviceInfo() {
+auto Context::queryDeviceInfo() -> void {
     // Collect physical devices and its properties
     vkGetPhysicalDeviceProperties( pDevice_, &pDeviceProperties_ );
     log::info( "vk::Device === name: {}", pDeviceProperties_.deviceName );
@@ -79,7 +81,7 @@ void Context::queryDeviceInfo() {
     }
 }
 
-void Context::querySurface() {
+auto Context::querySurface() -> void {
     // Physical device surface capabilities
     if ( const auto err = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(
              pDevice_, surface_, &surfaceCapabilities_ );

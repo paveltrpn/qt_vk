@@ -76,6 +76,12 @@ MainWindow::MainWindow( QQuickView *parent )
                             "handle!" );
                     }
 
+                    connect(
+                        renderItemHandle_, &RenderItem::renderInitialized, this,
+                        []() {
+                            //
+                            log::info( "MainWindow === render initialized!" );
+                        } );
                     break;
                 }
                 case QQuickView::Null: {

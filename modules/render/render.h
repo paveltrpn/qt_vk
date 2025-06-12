@@ -23,6 +23,8 @@ struct Render final {
     void createGraphicsPipeline();
 
 private:
+    // Non owning pointer to vulkan context that we
+    // use to render.
     vk::Context *context_{};
 
     std::unique_ptr<vk::Pipeline> piplineMatrixReady_{};

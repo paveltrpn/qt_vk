@@ -43,30 +43,50 @@ void RenderItem::beforeRendering() {
         // by QRhi interface and window.
         // This resources accumulated in vk::Context object
         // and used by vk::Render.
+
+        // Vulkan instance.
         const auto inst =
             reinterpret_cast<QVulkanInstance *>( renderInterface_->getResource(
                 window_, QSGRendererInterface::VulkanInstanceResource ) );
 
+        // VkSurfaceKHR assiciated with Qt window.
         const auto sface = inst->surfaceForWindow( window_ );
 
+        // Chosen physical device.
         const auto physDev = *reinterpret_cast<VkPhysicalDevice *>(
             renderInterface_->getResource(
                 window_, QSGRendererInterface::PhysicalDeviceResource ) );
 
+        // Acquired logical device.
         const auto dev =
             *reinterpret_cast<VkDevice *>( renderInterface_->getResource(
                 window_, QSGRendererInterface::DeviceResource ) );
 
+        // Render pass.
         const auto rp =
             *reinterpret_cast<VkRenderPass *>( renderInterface_->getResource(
                 window_, QSGRendererInterface::RenderPassResource ) );
 
+        // Graphics queue family index used by the scenegraph.
+        const auto gqfi =
+            *reinterpret_cast<uint32_t *>( renderInterface_->getResource(
+                window_,
+                QSGRendererInterface::GraphicsQueueFamilyIndexResource ) );
+
+        // Graphics queue index.
+        // NOTE: or VkQueue???
+        const auto gq =
+            *reinterpret_cast<VkQueue *>( renderInterface_->getResource(
+                window_, QSGRendererInterface::GraphicsQueueIndexResource ) );
+
         context_ = std::make_unique<vk::Context>( inst->vkInstance(), physDev,
-                                                  dev, sface, rp );
+                                                  dev, sface, rp, gqfi );
+
+        emit contextinitialized();
 
         render_->init( context_.get() );
-
         initialized_ = true;
+        emit renderInitialized();
     }
 }
 
