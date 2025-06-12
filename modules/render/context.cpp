@@ -79,10 +79,13 @@ auto Context::queryDeviceInfo() -> void {
             "{}",
             pDeviceProperties_.deviceName );
     }
+
+    // TODO: remove!!!
+    printDriverInfo();
 }
 
 auto Context::querySurface() -> void {
-    // Physical device surface capabilities
+    // Physical device surface capabilities.
     if ( const auto err = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(
              pDevice_, surface_, &surfaceCapabilities_ );
          err != VK_SUCCESS ) {

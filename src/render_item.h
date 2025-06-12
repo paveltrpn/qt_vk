@@ -31,6 +31,10 @@ public slots:
     void sync();
     void cleanup();
 
+protected:
+    auto updatePaintNode( QSGNode *node, UpdatePaintNodeData * )
+        -> QSGNode * override;
+
 private:
     void handleWindowChanged( QQuickWindow *win );
 

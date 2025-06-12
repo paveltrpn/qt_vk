@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <print>
 #include <vector>
 #include <expected>
 
@@ -66,6 +67,17 @@ struct Context final {
     [[nodiscard]] auto currentExtent() const -> const VkExtent2D& {
         return surfaceCapabilities_.currentExtent;
     };
+
+    // NOTE: temporary!
+    auto printDriverInfo() -> void {
+        std::println( "{} {} {} {} {} {}",
+                      VK_VERSION_MAJOR( pDeviceProperties_.driverVersion ),
+                      VK_VERSION_MINOR( pDeviceProperties_.driverVersion ),
+                      VK_VERSION_PATCH( pDeviceProperties_.driverVersion ),
+                      VK_VERSION_MAJOR( pDeviceProperties_.apiVersion ),
+                      VK_VERSION_MINOR( pDeviceProperties_.apiVersion ),
+                      VK_VERSION_PATCH( pDeviceProperties_.apiVersion ) );
+    }
 
 private:
     // Instance

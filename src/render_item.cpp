@@ -13,6 +13,12 @@ RenderItem::RenderItem( QQuickItem *parent )
              &RenderItem::handleWindowChanged );
 }
 
+auto RenderItem::updatePaintNode( QSGNode *node, UpdatePaintNodeData * )
+    -> QSGNode * {
+    window()->update();  // ensure getting to beforeRendering() at some point
+    return node;
+};
+
 void RenderItem::handleWindowChanged( QQuickWindow *win ) {
     if ( win ) {
         connect( win, &QQuickWindow::beforeSynchronizing, this,
@@ -52,6 +58,7 @@ void RenderItem::beforeRendering() {
         // VkSurfaceKHR assiciated with Qt window.
         const auto sface = inst->surfaceForWindow( window_ );
 
+        // const pDevsCount = window_->
         // Chosen physical device.
         const auto physDev = *reinterpret_cast<VkPhysicalDevice *>(
             renderInterface_->getResource(

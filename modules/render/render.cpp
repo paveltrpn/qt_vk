@@ -48,7 +48,7 @@ void Render::frame( VkCommandBuffer cb ) {
 
     // =================================
     // Get transformation matricies
-    auto offset = algebra::translate( 0.0f, 0.0f, -5.0f );
+    auto offset = algebra::translate( 0.0f, 0.0f, -2.0f );
     offset.transposeSelf();
 
     const auto [width, height] = context_->currentExtent();
