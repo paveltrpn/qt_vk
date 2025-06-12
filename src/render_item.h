@@ -18,35 +18,34 @@ struct RenderItem : QQuickItem {
 public:
     RenderItem( QQuickItem *parent = nullptr );
 
-    [[nodiscard]] unsigned long long t() const { return t_; }
-    void setT( unsigned long long t );
+    [[nodiscard]] auto t() const -> unsigned long long { return t_; }
+    auto setT( unsigned long long t ) -> void;
+    auto noop() -> void { log::info( "noop from render item" ); }
 
-    void noop() { log::info( "noop from render item" ); }
-
-    void updateSurface() {
+    auto updateSurface() -> void {
         if ( context_ ) context_->querySurface();
     }
 
 public slots:
-    void sync();
-    void cleanup();
+    auto sync() -> void;
+    auto cleanup() -> void;
 
 protected:
     auto updatePaintNode( QSGNode *node, UpdatePaintNodeData * )
         -> QSGNode * override;
 
 private:
-    void handleWindowChanged( QQuickWindow *win );
+    auto handleWindowChanged( QQuickWindow *win ) -> void;
 
 public slots:
-    void beforeRendering();
-    void beforeRenderPassRecording();
+    auto beforeRendering() -> void;
+    auto beforeRenderPassRecording() -> void;
 
 signals:
-    void tChanged();
+    auto tChanged() -> void;
 
-    void contextinitialized();
-    void renderInitialized();
+    auto contextinitialized() -> void;
+    auto renderInitialized() -> void;
 
 private:
     bool initialized_{ false };
@@ -60,6 +59,7 @@ private:
     std::unique_ptr<vk::Context> context_{ nullptr };
     std::unique_ptr<vk::Render> render_{ nullptr };
 
+    // Animation (i.e. frame update on main loop) depends on this.
     unsigned long long t_{};
 };
 
