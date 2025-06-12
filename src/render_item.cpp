@@ -96,7 +96,7 @@ void RenderItem::sync() {
     }
 
     if ( !render_ ) {
-        render_ = new RenderVK{};
+        render_ = new vk::Render{};
 
         // Initializing resources is done before starting to record the
         // renderpass, regardless of wanting an underlay or overlay.

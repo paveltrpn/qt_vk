@@ -6,7 +6,7 @@
 
 #include <vulkan/vulkan.h>
 
-#include "render/rendervk.h"
+#include "render/render.h"
 
 namespace tire {
 
@@ -50,7 +50,7 @@ private:
     QQuickWindow *window_{};
     QSGRendererInterface *renderInterface_{};
 
-    RenderVK *render_{ nullptr };
+    vk::Render *render_{ nullptr };
 
     unsigned long long t_{};
 };

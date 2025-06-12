@@ -12,14 +12,14 @@
 #include <vulkan/vulkan.h>
 #include <vulkan/vk_enum_string_helper.h>
 
-#include "rendervk.h"
+#include "render.h"
 #include "log/log.h"
 static constexpr bool DEBUG_OUTPUT_RENDERVK_CPP{ true };
 #include "algebra/matrix4.h"
 
-namespace tire {
+namespace tire::vk {
 
-void RenderVK::init( VkInstance instance, VkPhysicalDevice pDevice,
+void Render::init( VkInstance instance, VkPhysicalDevice pDevice,
                      VkDevice device, VkSurfaceKHR surface, VkRenderPass rp ) {
     try {
         context_ = std::make_unique<vk::Context>( instance, pDevice, device,
@@ -44,7 +44,7 @@ void RenderVK::init( VkInstance instance, VkPhysicalDevice pDevice,
     }
 }
 
-void RenderVK::frame( VkCommandBuffer cb ) {
+void Render::frame( VkCommandBuffer cb ) {
     // Update global timer
     timer_.update();
 

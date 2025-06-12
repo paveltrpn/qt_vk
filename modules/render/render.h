@@ -10,11 +10,11 @@
 
 #define FRAMES_IN_FLIGHT_COUNT 3
 
-namespace tire {
+namespace tire::vk {
 
-struct RenderVK final {
-    RenderVK() = default;
-    ~RenderVK() = default;
+struct Render final {
+    Render() = default;
+    ~Render() = default;
 
     void init( VkInstance instance, VkPhysicalDevice pDevice, VkDevice device,
                VkSurfaceKHR surface, VkRenderPass rp );
