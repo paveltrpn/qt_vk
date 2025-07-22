@@ -20,7 +20,11 @@ int main( int argc, char *argv[] ) {
     QVulkanInstance inst;
 
     // NOTE: have no effect.
-    inst.setApiVersion( { 1, 3 } );
+    inst.setApiVersion(  {1, 3, 0}  );
+
+    // inst.setLayers({"VK_LAYER_KHRONOS_validation"});
+
+    // inst.setExtensions({"VK_KHR_surface"});
 
     if ( !inst.create() ) {
         qDebug() << "bad vk instance";

@@ -138,7 +138,7 @@ void MainWindow::mouseReleaseEvent( QMouseEvent *ev ) {
 }
 
 void MainWindow::resizeEvent( QResizeEvent *ev ) {
-    qDebug() << ev->size();
+    // qDebug() << ev->size();
 
     if ( renderItemHandle_ ) renderItemHandle_->updateSurface();
 }

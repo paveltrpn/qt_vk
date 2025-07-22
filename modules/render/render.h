@@ -18,7 +18,7 @@ struct Render final {
 
     void init( vk::Context *context );
 
-    void frame( VkCommandBuffer cb );
+    void frame( VkCommandBuffer cb, uint32_t width, uint32_t height );
 
     void createGraphicsPipeline();
 

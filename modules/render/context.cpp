@@ -90,15 +90,20 @@ auto Context::queryDeviceInfo() -> void {
 }
 
 auto Context::querySurface() -> void {
+    if (surface_ == VK_NULL_HANDLE) {
+        log::error("Context === can not get surface handle for window!");
+    }
+
     // Physical device surface capabilities.
+    // NOTE: got error on amd APU.
     if ( const auto err = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(
              pDevice_, surface_, &surfaceCapabilities_ );
          err != VK_SUCCESS ) {
-        log::fatal( "failed to obtain surface capabilities with code {}!\n",
+        log::fatal( "vk::Context === failed to obtain surface capabilities with code {}!\n",
                     string_VkResult( err ) );
     } else {
         log::debug<DEBUG_OUTPUT_CONTEXT_CPP>(
-            "vk::Device === physical device surface capabilities acquire "
+            "vk::Context === physical device surface capabilities acquire "
             "success!" );
     }
 }

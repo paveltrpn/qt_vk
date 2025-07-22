@@ -66,6 +66,7 @@ private:
     // Used to acquire qt initialize vulkan resources.
     QRhi *rhiHandle{};
 
+    // Custom render.
     std::unique_ptr<vk::Context> context_{ nullptr };
     std::unique_ptr<vk::Render> render_{ nullptr };
 

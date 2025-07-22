@@ -60,13 +60,16 @@ void RenderItem::beforeRendering() {
         // Vulkan instance from QRhi.
         const auto inst = nh->inst;
 
-        // Vulkan instance from window.
+        //Vulkan instance from window.
         // const auto inst =
         // reinterpret_cast<QVulkanInstance *>( renderInterface_->getResource(
         // window_, QSGRendererInterface::VulkanInstanceResource ) );
 
         // VkSurfaceKHR assiciated with Qt window.
         const auto sface = inst->surfaceForWindow( window_ );
+        if (sface == VK_NULL_HANDLE) {
+            log::error("RenderItem === can not get surface handle for window!");
+        }
 
         // Chosen physical device.
         const auto physDev = *reinterpret_cast<VkPhysicalDevice *>(
@@ -117,7 +120,8 @@ void RenderItem::beforeRenderPassRecording() {
         *reinterpret_cast<VkCommandBuffer *>( renderInterface_->getResource(
             window_, QSGRendererInterface::CommandListResource ) );
 
-    render_->frame( cb );
+    // Render frame with custom scene.
+    render_->frame( cb, 200, 200 );
 
     window_->endExternalCommands();
 }
