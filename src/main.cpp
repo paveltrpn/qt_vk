@@ -13,8 +13,10 @@ int main( int argc, char *argv[] ) {
 
     tire::log::info( "Qt version: {}", qVersion() );
 
+    // Force use vulkan as backend renderer API.
     QQuickWindow::setGraphicsApi( QSGRendererInterface::Vulkan );
 
+    // Instance to config and pass to qt.
     QVulkanInstance inst;
 
     // NOTE: have no effect.
@@ -29,5 +31,6 @@ int main( int argc, char *argv[] ) {
     view.setVulkanInstance( &inst );
     view.show();
 
+    // Main loop starts here.
     return app.exec();
 }

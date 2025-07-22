@@ -8,7 +8,7 @@
 #include <QtQml>
 #include <QQuickView>
 
-#include "theme_manager.h"
+#include "appearance.h"
 #include "render_item.h"
 
 namespace tire {
@@ -45,7 +45,7 @@ private:
     QQmlEngine *engine_;
     QQmlContext *context_;
     QSettings *settings_;
-    ThemeManager *theme_;
+    Appearance *theme_;
 
     RenderItem *renderItemHandle_{};
 };

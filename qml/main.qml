@@ -9,6 +9,7 @@ Item {
     id: mainWindow
     readonly property var _fonts: Constants.fonts
     readonly property var _units: Constants.units
+    readonly property var _color: Appearence.colors
     property string foo: "foo"
 
     // =====================================================
@@ -44,7 +45,7 @@ Item {
             width: 64
             height: 64
 
-            color: Theme.colors["background_additional_40"]
+            color: _color["background_additional_40"]
 
 
             /*
@@ -98,7 +99,7 @@ Item {
 
             radius: 8
 
-            color: Theme.colors["background"]
+            color: _color["background"]
 
             NpButton {
                 id: reloadModelsButton

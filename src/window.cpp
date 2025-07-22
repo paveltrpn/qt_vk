@@ -22,7 +22,7 @@ MainWindow::MainWindow( QQuickView *parent )
     , settings_{ new QSettings(
           workPath().path() + QDir::separator() + "settings.ini",
           QSettings::NativeFormat, this ) }
-    , theme_{ new ThemeManager{ workPath(), this } }
+    , theme_{ new Appearance{ workPath(), this } }
 
 {
     QSGRendererInterface *rif = this->rendererInterface();
@@ -41,7 +41,7 @@ MainWindow::MainWindow( QQuickView *parent )
     setResizeMode( QQuickView::SizeRootObjectToView );
 
     // Actions that must be processed before main QML component created.
-    qmlRegisterSingletonInstance( "Tire", 1, 0, "Theme", theme_ );
+    qmlRegisterSingletonInstance( "Tire", 1, 0, "Appearence", theme_ );
     qmlRegisterType<RenderItem>( "Tire", 1, 0, "Render" );
 
     // Pass this pointer to qml.

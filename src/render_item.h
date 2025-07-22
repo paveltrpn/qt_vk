@@ -11,6 +11,8 @@
 
 namespace tire {
 
+// QQuickItem component, responsible for render scene.
+// Drawed at forground of main window. Spawn in main.qml
 struct RenderItem : QQuickItem {
     Q_OBJECT
     Q_PROPERTY( unsigned long long t READ t WRITE setT NOTIFY tChanged )
@@ -61,6 +63,7 @@ private:
     QSGRendererInterface *renderInterface_{};
 
     // Native QRhi render hardware interface handle.
+    // Used to acquire qt initialize vulkan resources.
     QRhi *rhiHandle{};
 
     std::unique_ptr<vk::Context> context_{ nullptr };
