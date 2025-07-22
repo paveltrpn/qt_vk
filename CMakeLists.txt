@@ -5,7 +5,7 @@ set(CMAKE_CXX_COMPILER $ENV{GCC_LATEST}/bin/g++-15.1)
 add_compile_options(-std=c++26)
 set(CMAKE_BUILD_TYPE Debug)
 
-project(tire)
+project(qt_vk)
 
 include_directories("modules")
 
@@ -62,7 +62,7 @@ target_link_libraries(render vulkan algebra log)
 # ================================
 file(GLOB MOD_TIRE_SRC "src/*.cpp" "src/*.h")
 add_executable(${PROJECT_NAME} ${MOD_TIRE_SRC})
-set_target_properties(tire PROPERTIES AUTOMOC TRUE)
+set_target_properties(qt_vk PROPERTIES AUTOMOC TRUE)
 target_link_libraries(${PROJECT_NAME}
     log
     algebra
