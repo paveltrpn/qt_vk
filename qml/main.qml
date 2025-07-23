@@ -7,10 +7,11 @@ import "components"
 
 Item {
     id: mainWindow
-    readonly property var _fonts: Constants.fonts
-    readonly property var _units: Constants.units
+
+    readonly property var _fonts: Appearence.fonts
+    readonly property var _gaps: Appearence.gaps
+    readonly property var _radius: Appearence.radius
     readonly property var _color: Appearence.colors
-    property string foo: "foo"
 
     // =====================================================
     // RenderItem instance that holds vk::Context and
@@ -25,8 +26,8 @@ Item {
             loops: Animation.Infinite
         }
     }
-    // =====================================================
 
+    // =====================================================
     Item {
         id: background
         anchors {
@@ -83,7 +84,8 @@ Item {
                                            mouse.y - clickPos.y)
                                        //mainWindow.x += delta.x
                                        //mainWindow.y += delta.y
-                                       mainQuickViewHandle.move(delta.x, delta.y)
+                                       mainQuickViewHandle.move(delta.x,
+                                                                delta.y)
                                    }
             }
         }
@@ -100,6 +102,20 @@ Item {
             radius: 8
 
             color: _color["background"]
+
+            Text {
+                id: testText
+
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                    right: parent.right
+                }
+
+                color: "white"
+                font: _fonts["label_accent"]
+                text: "test test FOO"
+            }
 
             NpButton {
                 id: reloadModelsButton

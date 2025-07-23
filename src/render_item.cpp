@@ -67,8 +67,9 @@ void RenderItem::beforeRendering() {
 
         // VkSurfaceKHR assiciated with Qt window.
         const auto sface = inst->surfaceForWindow( window_ );
-        if (sface == VK_NULL_HANDLE) {
-            log::error("RenderItem === can not get surface handle for window!");
+        if ( sface == VK_NULL_HANDLE ) {
+            log::error(
+                "RenderItem === can not get surface handle for window!" );
         }
 
         // Chosen physical device.
@@ -120,8 +121,11 @@ void RenderItem::beforeRenderPassRecording() {
         *reinterpret_cast<VkCommandBuffer *>( renderInterface_->getResource(
             window_, QSGRendererInterface::CommandListResource ) );
 
+    //
+    const auto g = window_->geometry();
+
     // Render frame with custom scene.
-    render_->frame( cb, 200, 200 );
+    render_->frame( cb, g.width(), g.height() );
 
     window_->endExternalCommands();
 }

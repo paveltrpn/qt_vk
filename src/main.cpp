@@ -9,7 +9,7 @@
 #include "log/log.h"
 
 int main( int argc, char *argv[] ) {
-    QGuiApplication app( argc, argv );
+    const QGuiApplication app( argc, argv );
 
     tire::log::info( "Qt version: {}", qVersion() );
 
@@ -20,9 +20,9 @@ int main( int argc, char *argv[] ) {
     QVulkanInstance inst;
 
     // NOTE: have no effect.
-    inst.setApiVersion(  {1, 3, 0}  );
+    inst.setApiVersion( { 1, 2, 0 } );
 
-    // inst.setLayers({"VK_LAYER_KHRONOS_validation"});
+    // inst.setLayers( { "VK_LAYER_KHRONOS_validation" } );
 
     // inst.setExtensions({"VK_KHR_surface"});
 
@@ -31,9 +31,10 @@ int main( int argc, char *argv[] ) {
         return 1;
     }
 
-    tire::MainWindow view{};
-    view.setVulkanInstance( &inst );
-    view.show();
+    tire::MainWindow w{};
+
+    w.setVulkanInstance( &inst );
+    w.show();
 
     // Main loop starts here.
     return app.exec();
