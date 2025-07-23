@@ -47,7 +47,12 @@ private:
     auto handleWindowChanged( QQuickWindow *win ) -> void;
 
 public slots:
+    // Context and Render will be initialezed at first call
+    // of this signal.
     auto beforeRendering() -> void;
+
+    // Signal that handle our custom render commands invocation.
+    // I.e. this routine perform main render call.
     auto beforeRenderPassRecording() -> void;
 
 signals:

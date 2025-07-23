@@ -26,6 +26,7 @@ MainWindow::MainWindow( QQuickView *parent )
 
 {
     QSGRendererInterface *rif = this->rendererInterface();
+
     // We are not prepared for anything other than running with the RHI and its Vulkan backend.
     if ( rif->graphicsApi() != QSGRendererInterface::Vulkan ) {
         log::fatal(
@@ -40,10 +41,10 @@ MainWindow::MainWindow( QQuickView *parent )
     // Configure main window.
     setResizeMode( QQuickView::SizeRootObjectToView );
 
-    // Actions that must be processed before main QML component created.
+    // Pass Appearence object pointer to qml.
     qmlRegisterSingletonInstance( "Tire", 1, 0, "Appearence", theme_ );
 
-    // Register REnderItem aml type. We instatiate item of
+    // Register RenderItem qml type. We instatiate item of
     // of this type only once in main.qml
     qmlRegisterType<RenderItem>( "Tire", 1, 0, "Render" );
 
@@ -52,7 +53,7 @@ MainWindow::MainWindow( QQuickView *parent )
     context_->setContextProperty( "mainWindowHandle", this );
 
     // Dummy context property registration. This action
-    // suspend qml warnings when access "renderItemHandle" members in qml.
+    // supress qml warnings when access "renderItemHandle" members in qml.
     // Later "renderItemHandle" property will be assigned with real
     // RenderItem pointer.
     context_->setContextProperty( "renderItemHandle", nullptr );
@@ -83,7 +84,7 @@ MainWindow::MainWindow( QQuickView *parent )
                     // Get main renderer item handle from QML.
                     // It istatiates only once in main.qml.
                     //
-                    // TODO: Spawn this on c++ code and attach to
+                    // TODO: Spawn this in c++ code and attach to
                     // qml scene graph somehow to avoid explicit definition
                     // of this object in main.qml
                     renderItemHandle_ = rootObject()->findChild<RenderItem *>();

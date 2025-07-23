@@ -13,11 +13,11 @@ Item {
     readonly property var _radius: Appearence.radius
     readonly property var _color: Appearence.colors
 
-    // =====================================================
     // RenderItem instance that holds vk::Context and
     // vk::Render objects. Pointer to this object
     // available in main application.
     // Can be accesed as "renderItemHandle.doSomeAction()"
+    // or bu id property.
     Render {}
 
     Connections {
@@ -30,8 +30,8 @@ Item {
         }
     }
 
-    // Main ui component must
-    // be loaded deffered after render item fully initialized.
+    // Main ui component loading must be
+    // deffered after render item fully initialized.
     Loader {
         id: mainUIComponentLoader
     }
@@ -134,7 +134,7 @@ Item {
 
                     height: 32
                     color: "white"
-                    font: _fonts.label_accent
+                    font: _fonts.label
                     text: renderItemHandle.infoRenderDevice()
                 }
             }

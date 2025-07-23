@@ -60,7 +60,7 @@ void RenderItem::beforeRendering() {
         // Vulkan instance from QRhi.
         const auto inst = nh->inst;
 
-        //Vulkan instance from window.
+        // Vulkan instance from window.
         // const auto inst =
         // reinterpret_cast<QVulkanInstance *>( renderInterface_->getResource(
         // window_, QSGRendererInterface::VulkanInstanceResource ) );
