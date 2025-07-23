@@ -48,22 +48,27 @@ Item {
 
         Item {
             id: background
-            anchors {
-                left: parent.left
-                right: parent.right
-                top: parent.top
-                bottom: parent.bottom
-            }
+
             Rectangle {
                 id: dummyz
                 anchors {
-                    //right: parent.right
-                    //bottom: parent.bottom
+                    // right: parent.right
+                    // bottom: parent.bottom
                     centerIn: parent
                 }
                 width: 100
                 height: 100
                 color: "blue"
+
+                Rectangle {
+                    anchors {
+                        left: parent.right
+                        top: parent.bottom
+                    }
+                    width: 50
+                    height: 50
+                    color: "red"
+                }
             }
 
             DragAbleItem {
@@ -90,6 +95,8 @@ Item {
                     onClicked: {
                         mainWindowHandle.noop()
                         renderItemHandle.noop()
+
+                        console.log("=== " + mainWindow.width)
                     }
                 }
 
