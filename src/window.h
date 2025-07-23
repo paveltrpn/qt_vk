@@ -48,6 +48,8 @@ private:
     Appearance *theme_;
 
     RenderItem *renderItemHandle_{};
+
+    QTimer update_{};
 };
 
 }  // namespace tire

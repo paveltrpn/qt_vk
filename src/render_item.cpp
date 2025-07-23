@@ -35,7 +35,7 @@ void RenderItem::cleanup() {
     log::info( "RenderItem === cleanup.." );
 }
 
-void RenderItem::setT( unsigned long long t ) {
+auto RenderItem::updateWindow() -> void {
     if ( window_ ) {
         window_->update();
     }

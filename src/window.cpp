@@ -47,6 +47,9 @@ MainWindow::MainWindow( QQuickView *parent )
     // Pass this pointer to qml.
     context_->setContextProperty( "mainQuickViewHandle", this );
 
+    // Setup RenderItem update interval.
+    update_.setInterval( 1 );
+
     // Load main QML component.
     connect(
         this, &QQuickView::statusChanged, this,
@@ -66,15 +69,20 @@ MainWindow::MainWindow( QQuickView *parent )
                 case QQuickView::Ready: {
                     log::info( "MainWindow === main QML component ready." );
 
-                    // Get main renderer handle from QML. Is it need to be
-                    // done asynchronous only after QQuickView::statusChanged
-                    // signal?
+                    // Get main renderer handle from QML.
                     renderItemHandle_ = rootObject()->findChild<RenderItem *>();
                     if ( !renderItemHandle_ ) {
                         log::warning(
                             "MainWindow === can't acquire renderer "
                             "handle!" );
                     }
+
+                    // Start update timer.
+                    update_.start();
+
+                    // Call updateWindow to redraw qml item.
+                    connect( &update_, &QTimer::timeout, renderItemHandle_,
+                             &RenderItem::updateWindow );
 
                     connect(
                         renderItemHandle_, &RenderItem::renderInitialized, this,

@@ -19,12 +19,6 @@ Item {
     // available in main application.
     Render {
         id: mainRenderItem
-        NumberAnimation on t {
-            running: true
-            from: 0
-            to: 1 << 63
-            loops: Animation.Infinite
-        }
     }
 
     // =====================================================
