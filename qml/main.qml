@@ -13,6 +13,7 @@ Item {
     readonly property var _radius: Appearence.radius
     readonly property var _color: Appearence.colors
 
+    anchors.fill: parent
     // RenderItem instance that holds vk::Context and
     // vk::Render objects. Pointer to this object
     // available in main application.
@@ -34,6 +35,12 @@ Item {
     // deffered after render item fully initialized.
     Loader {
         id: mainUIComponentLoader
+        anchors {
+            // left: parent.left
+            // right: parent.right
+            // top: parent.top
+            // bottom: parent.bottom
+        }
     }
 
     // Component that holds ui itself.
@@ -47,6 +54,17 @@ Item {
                 right: parent.right
                 top: parent.top
                 bottom: parent.bottom
+            }
+            Rectangle {
+                id: dummyz
+                anchors {
+                    //right: parent.right
+                    //bottom: parent.bottom
+                    centerIn: parent
+                }
+                width: 100
+                height: 100
+                color: "blue"
             }
 
             DragAbleItem {
@@ -100,6 +118,7 @@ Item {
 
                 x: 400
                 y: 100
+                z: parent.z
 
                 radius: _radius.full
                 color: _color.background
