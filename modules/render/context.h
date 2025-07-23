@@ -80,6 +80,10 @@ struct Context final {
                       VK_VERSION_PATCH( pDeviceProperties_.apiVersion ) );
     }
 
+    auto getDeviceNameString() -> std::string {
+        return pDeviceProperties_.deviceName;
+    }
+
 private:
     // Instance
     VkInstance instance_{ VK_NULL_HANDLE };

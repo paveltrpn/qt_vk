@@ -26,6 +26,14 @@ public:
         if ( context_ ) context_->querySurface();
     }
 
+    // Context proxy functions
+public:
+    Q_INVOKABLE QString infoRenderDevice();
+
+    // Render proxy functions
+public:
+    Q_INVOKABLE void renderNoop(){};
+
 public slots:
     auto updateWindow() -> void;
     auto sync() -> void;

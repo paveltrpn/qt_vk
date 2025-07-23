@@ -51,6 +51,12 @@ MainWindow::MainWindow( QQuickView *parent )
     // Available as "mainWindowHandle.doSomeAction()"
     context_->setContextProperty( "mainWindowHandle", this );
 
+    // Dummy context property registration. This action
+    // suspend qml warnings when access "renderItemHandle" members in qml.
+    // Later "renderItemHandle" property will be assigned with real
+    // RenderItem pointer.
+    context_->setContextProperty( "renderItemHandle", nullptr );
+
     // Setup RenderItem update interval.
     update_.setInterval( 1 );
 

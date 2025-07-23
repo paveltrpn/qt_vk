@@ -17,92 +17,126 @@ Item {
     // RenderItem instance that holds vk::Context and
     // vk::Render objects. Pointer to this object
     // available in main application.
-    //
     // Can be accesed as "renderItemHandle.doSomeAction()"
-    Render {
-        // id: mainRenderItem
+    Render {}
+
+    Connections {
+        target: renderItemHandle
+
+        function onContextinitialized() {}
+
+        function onRenderInitialized() {
+            mainUIComponentLoader.sourceComponent = mainUIComponent
+        }
     }
 
-    // =====================================================
-    Item {
-        id: background
-        anchors {
-            left: parent.left
-            right: parent.right
-            top: parent.top
-            bottom: parent.bottom
-        }
+    // Main ui component must
+    // be loaded deffered after render item fully initialized.
+    Loader {
+        id: mainUIComponentLoader
+    }
 
-        DragAbleItem {
-            id: leftPanel
+    // Component that holds ui itself.
+    Component {
+        id: mainUIComponent
 
-            height: reloadModelsButton.height + 32
-            width: reloadModelsButton.width + closeButton.width + 32
+        Item {
+            id: background
+            anchors {
+                left: parent.left
+                right: parent.right
+                top: parent.top
+                bottom: parent.bottom
+            }
 
-            x: 100
-            y: 100
+            DragAbleItem {
+                id: leftPanel
 
-            radius: _radius.full
-            color: _color.background
+                height: reloadModelsButton.height + 32
+                width: reloadModelsButton.width + closeButton.width + 32
 
-            NpButton {
-                id: reloadModelsButton
-                anchors {
-                    left: leftPanel.left
-                    leftMargin: 8
-                    bottom: leftPanel.bottom
-                    bottomMargin: 8
+                x: 100
+                y: 100
+
+                radius: _radius.full
+                color: _color.background
+
+                NpButton {
+                    id: reloadModelsButton
+                    anchors {
+                        left: leftPanel.left
+                        leftMargin: 8
+                        bottom: leftPanel.bottom
+                        bottomMargin: 8
+                    }
+                    icon.source: "icons/exit_up.svg"
+                    onClicked: {
+                        mainWindowHandle.noop()
+                        renderItemHandle.noop()
+                    }
                 }
-                icon.source: "icons/exit_up.svg"
-                onClicked: {
-                    mainWindowHandle.noop()
-                    renderItemHandle.noop()
+
+                NpButton {
+                    id: closeButton
+                    anchors {
+                        right: leftPanel.right
+                        rightMargin: 8
+                        bottom: leftPanel.bottom
+                        bottomMargin: 8
+                    }
+                    icon.source: "icons/power.svg"
+                    onClicked: {
+                        // Send QQmlEngine::quit()
+                        Qt.quit()
+                    }
                 }
             }
 
-            NpButton {
-                id: closeButton
-                anchors {
-                    right: leftPanel.right
-                    rightMargin: 8
-                    bottom: leftPanel.bottom
-                    bottomMargin: 8
-                }
-                icon.source: "icons/power.svg"
-                onClicked: {
-                    // Send QQmlEngine::quit()
-                    Qt.quit()
-                }
-            }
-        }
+            DragAbleItem {
+                id: vulkanInfoWidget
 
-        DragAbleItem {
-            id: vulkanInfoWidget
+                height: 128
+                width: 258
 
-            height: 128
-            width: 258
+                x: 400
+                y: 100
 
-            x: 400
-            y: 100
+                radius: _radius.full
+                color: _color.background
 
-            radius: _radius.full
-            color: _color.background
+                Text {
+                    id: vulkanInfoWidgetTitle
 
-            Text {
-                id: vulkanInfoWidgetTitle
+                    anchors {
+                        top: parent.top
+                        topMargin: _gaps.half
+                        left: parent.left
+                        leftMargin: _gaps.half
+                        right: parent.right
+                    }
 
-                anchors {
-                    top: parent.top
-                    topMargin: _gaps.half
-                    left: parent.left
-                    leftMargin: _gaps.half
-                    right: parent.right
+                    height: 32
+                    color: "white"
+                    font: _fonts.label_accent
+                    text: "Vulkan info"
                 }
 
-                height: 32
-                color: "white"
-                font: _fonts.label_accent
-                text: "Vulkan info"
+                Text {
+                    id: device
+
+                    anchors {
+                        top: vulkanInfoWidgetTitle.bottom
+                        topMargin: _gaps.half
+                        left: parent.left
+                        leftMargin: _gaps.half
+                        right: parent.right
+                    }
+
+                    height: 32
+                    color: "white"
+                    font: _fonts.label_accent
+                    text: renderItemHandle.infoRenderDevice()
+                }
             }
         }
     }

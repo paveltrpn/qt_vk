@@ -105,6 +105,7 @@ void RenderItem::beforeRendering() {
 
         render_->init( context_.get() );
         initialized_ = true;
+
         emit renderInitialized();
     }
 }
@@ -156,6 +157,10 @@ void RenderItem::sync() {
         connect( window_, &QQuickWindow::beforeRenderPassRecording, this,
                  &RenderItem::beforeRenderPassRecording, Qt::DirectConnection );
     }
+}
+
+QString RenderItem::infoRenderDevice() {
+    return QString::fromStdString( context_->getDeviceNameString() );
 }
 
 }  // namespace tire
