@@ -17,7 +17,7 @@ Item {
     // vk::Render objects. Pointer to this object
     // available in main application.
     // Can be accesed as "renderItemHandle.doSomeAction()"
-    // or bu id property.
+    // or by id property.
     Render {}
 
     Connections {
@@ -30,8 +30,8 @@ Item {
         }
     }
 
-    // Main ui component loading must be
-    // deffered after render item fully initialized.
+    // Main ui component loading must be defferedl,
+    // it appears after render item fully initialized.
     Loader {
         id: mainUIComponentLoader
     }
@@ -43,6 +43,9 @@ Item {
         Item {
             id: background
 
+            // HACK: Item used to set Z (bigger?) value.
+            // Also it can be some pivot point to another anchored items. because
+            // by now mainWindow do not know its size and anchors to it not working.
             Rectangle {
                 id: dummyz
                 anchors {
@@ -50,19 +53,9 @@ Item {
                     // bottom: parent.bottom
                     centerIn: parent
                 }
-                width: 100
-                height: 100
+                width: 10
+                height: 10
                 color: "blue"
-
-                Rectangle {
-                    anchors {
-                        left: parent.right
-                        top: parent.bottom
-                    }
-                    width: 50
-                    height: 50
-                    color: "red"
-                }
             }
 
             DragAbleItem {
@@ -89,8 +82,6 @@ Item {
                     onClicked: {
                         mainWindowHandle.noop()
                         renderItemHandle.noop()
-
-                        console.log("=== " + mainWindow.width)
                     }
                 }
 

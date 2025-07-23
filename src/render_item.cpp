@@ -42,8 +42,8 @@ auto RenderItem::updateWindow() -> void {
 }
 
 void RenderItem::beforeRendering() {
-    if ( !initialized_ ) {
-        // Acquire vulkan resurces, initialized by Qt and provided
+    if ( !context_ ) {
+        // Acquire vulkan resurces initialized by Qt and provided
         // by QRhi interface and window.
         // This resources accumulated in vk::Context object
         // and used by vk::Render.
@@ -104,7 +104,6 @@ void RenderItem::beforeRendering() {
         emit contextinitialized();
 
         render_->init( context_.get() );
-        initialized_ = true;
 
         emit renderInitialized();
     }
@@ -113,9 +112,7 @@ void RenderItem::beforeRendering() {
 void RenderItem::beforeRenderPassRecording() {
     window_->beginExternalCommands();
 
-    // Must query the command buffer _after_ beginExternalCommands(), this is
-    // actually important when running on Vulkan because what we get here is a
-    // new secondary command buffer, not the primary one.
+    // Query secondary command buffer. This must be done _after_ beginExternalCommands().
     // This object has limited validity, and is only valid while the scene
     // graph is preparing the next frame.
     const auto cb =

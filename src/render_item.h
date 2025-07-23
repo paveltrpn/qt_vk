@@ -35,7 +35,10 @@ public:
     Q_INVOKABLE void renderNoop(){};
 
 public slots:
+    // Call update to undelying window. Redraw item.
     auto updateWindow() -> void;
+    // Render will be created and qt handles will be
+    // acquired at first call of this signal.
     auto sync() -> void;
     auto cleanup() -> void;
 
@@ -47,7 +50,7 @@ private:
     auto handleWindowChanged( QQuickWindow *win ) -> void;
 
 public slots:
-    // Context and Render will be initialezed at first call
+    // Context will be created and Render will be initialezed at first call
     // of this signal.
     auto beforeRendering() -> void;
 
@@ -60,8 +63,6 @@ signals:
     auto renderInitialized() -> void;
 
 private:
-    bool initialized_{ false };
-
     // Cached window and render interface that this item
     // assined to. Is this pointers valid through all
     // window lifetime?
