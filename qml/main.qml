@@ -37,60 +37,7 @@ Item {
             bottom: parent.bottom
         }
 
-        Rectangle {
-            id: mainWindowDragArea
-            anchors {
-                top: parent.top
-                right: parent.right
-            }
-            width: 64
-            height: 64
-
-            color: _color["background_additional_40"]
-
-
-            /*
-            Image {
-                id: mainWindowDragIcon
-                anchors.centerIn: parent
-                source: "icons/arrow_all_direction_01.svg"
-                sourceSize: Qt.size(
-                                mainWindowDragIconHiddenImg.sourceSize.width * 2,
-                                mainWindowDragIconHiddenImg.sourceSize.height * 2)
-                Image {
-                    id: mainWindowDragIconHiddenImg
-                    source: parent.source
-                    width: 0
-                    height: 0
-                }
-                ColorOverlay {
-                    anchors.fill: mainWindowDragIcon
-                    source: mainWindowDragIcon
-                    color: "white"
-                }
-            }
-            */
-            MouseArea {
-                anchors.fill: parent
-                property variant clickPos: "1,1"
-
-                onPressed: mouse => {
-                               clickPos = Qt.point(mouse.x, mouse.y)
-                           }
-
-                onPositionChanged: mouse => {
-                                       var delta = Qt.point(
-                                           mouse.x - clickPos.x,
-                                           mouse.y - clickPos.y)
-                                       //mainWindow.x += delta.x
-                                       //mainWindow.y += delta.y
-                                       mainQuickViewHandle.move(delta.x,
-                                                                delta.y)
-                                   }
-            }
-        }
-
-        Rectangle {
+        DragAbleItem {
             id: leftPanel
 
             height: reloadModelsButton.height + 32
@@ -99,23 +46,8 @@ Item {
             x: 100
             y: 100
 
-            radius: 8
-
-            color: _color["background"]
-
-            Text {
-                id: testText
-
-                anchors {
-                    top: parent.top
-                    left: parent.left
-                    right: parent.right
-                }
-
-                color: "white"
-                font: _fonts["label_accent"]
-                text: "test test FOO"
-            }
+            radius: _radius.full
+            color: _color.background
 
             NpButton {
                 id: reloadModelsButton
@@ -141,36 +73,39 @@ Item {
                 }
                 icon.source: "icons/power.svg"
                 onClicked: {
-                    // send QQmlEngine::quit()
+                    // Send QQmlEngine::quit()
                     Qt.quit()
                 }
             }
+        }
 
-            Item {
+        DragAbleItem {
+            id: vulkanInfoWidget
+
+            height: 128
+            width: 258
+
+            x: 400
+            y: 100
+
+            radius: _radius.full
+            color: _color.background
+
+            Text {
+                id: vulkanInfoWidgetTitle
+
                 anchors {
                     top: parent.top
+                    topMargin: _gaps.half
                     left: parent.left
+                    leftMargin: _gaps.half
                     right: parent.right
                 }
-                height: 24
 
-                MouseArea {
-                    id: topMouseRegion
-                    anchors.fill: parent
-                    property variant clickPos: "1,1"
-
-                    onPressed: mouse => {
-                                   clickPos = Qt.point(mouse.x, mouse.y)
-                               }
-
-                    onPositionChanged: mouse => {
-                                           var delta = Qt.point(
-                                               mouse.x - clickPos.x,
-                                               mouse.y - clickPos.y)
-                                           leftPanel.x += delta.x
-                                           leftPanel.y += delta.y
-                                       }
-                }
+                height: 32
+                color: "white"
+                font: _fonts.label_accent
+                text: "Vulkan info"
             }
         }
     }

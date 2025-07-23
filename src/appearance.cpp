@@ -43,9 +43,9 @@ Appearance::Appearance( const QDir &path, QObject *parent )
     fonts_["subtext"] = QFont{ "Roboto Mono", 12, QFont::Medium };
 
     // Build gaps map
-    fonts_["quarter"] = 4;
-    fonts_["half"] = 8;
-    fonts_["full"] = 16;
+    gaps_["quarter"] = 4;
+    gaps_["half"] = 8;
+    gaps_["full"] = 16;
 
     // Build radius map
     radius_["quarter"] = 4;

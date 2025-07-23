@@ -1,3 +1,4 @@
-module tree_view
+module tire
 
 NpButton			1.0 NpButton.qml
+DragAbleItem        1.0 DragAbleItem.qml
