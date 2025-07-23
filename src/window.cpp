@@ -124,6 +124,7 @@ MainWindow::MainWindow( QQuickView *parent )
                 }
             }
         } );
+
     // Load main QML component.
     setSource( QUrl( workPath().path() + QDir::separator() + "qml/main.qml" ) );
 
