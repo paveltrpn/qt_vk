@@ -42,15 +42,19 @@ MainWindow::MainWindow( QQuickView *parent )
 
     // Actions that must be processed before main QML component created.
     qmlRegisterSingletonInstance( "Tire", 1, 0, "Appearence", theme_ );
+
+    // Register REnderItem aml type. We instatiate item of
+    // of this type only once in main.qml
     qmlRegisterType<RenderItem>( "Tire", 1, 0, "Render" );
 
-    // Pass this pointer to qml.
-    context_->setContextProperty( "mainQuickViewHandle", this );
+    // Pass pointer to this object (MainWindow) to qml.
+    // Available as "mainWindowHandle.doSomeAction()"
+    context_->setContextProperty( "mainWindowHandle", this );
 
     // Setup RenderItem update interval.
     update_.setInterval( 1 );
 
-    // Load main QML component.
+    // Schedule actions on main component loading.
     connect(
         this, &QQuickView::statusChanged, this,
         [this]( QQuickView::Status status ) {
@@ -66,21 +70,29 @@ MainWindow::MainWindow( QQuickView *parent )
                         "MainWindow === main QML component loading... " );
                     break;
                 }
+                    // Actions when main.qml properly loaded.
                 case QQuickView::Ready: {
                     log::info( "MainWindow === main QML component ready." );
 
                     // Get main renderer item handle from QML.
-                    // It istatiate only once in main.qml.
+                    // It istatiates only once in main.qml.
                     //
                     // TODO: Spawn this on c++ code and attach to
                     // qml scene graph somehow to avoid explicit definition
                     // of this object in main.qml
                     renderItemHandle_ = rootObject()->findChild<RenderItem *>();
                     if ( !renderItemHandle_ ) {
-                        log::warning(
+                        log::fatal(
                             "MainWindow === can't acquire renderer "
                             "handle!" );
                     }
+
+                    // Pass pointer to RenderItem object back to qml.
+                    // We do it despite RenderItem already instatiated in
+                    // main.qml as Render{} item and available by its id.
+                    // Can be accesed as "renderItemHandle.doSomeAction()"
+                    context_->setContextProperty( "renderItemHandle",
+                                                  renderItemHandle_ );
 
                     // Start update timer.
                     update_.start();
@@ -89,6 +101,7 @@ MainWindow::MainWindow( QQuickView *parent )
                     connect( &update_, &QTimer::timeout, renderItemHandle_,
                              &RenderItem::updateWindow );
 
+                    // Do some actions when render object completed.
                     connect(
                         renderItemHandle_, &RenderItem::renderInitialized, this,
                         []() {
@@ -104,9 +117,10 @@ MainWindow::MainWindow( QQuickView *parent )
                 }
             }
         } );
+    // Load main QML component.
     setSource( QUrl( workPath().path() + QDir::separator() + "qml/main.qml" ) );
 
-    // Deal with with main window geometry.
+    // Set deefault or restore main window geometry.
     const auto restoredGeometry =
         settings_->value( "main_window_geometry", QRect( 300, 300, 640, 480 ) );
     setGeometry( restoredGeometry.toRect() );
@@ -118,9 +132,6 @@ MainWindow::MainWindow( QQuickView *parent )
 
 void MainWindow::closeEvent( QCloseEvent *ev ) {
     log::info( "quit" );
-
-    // NOTE: renderer object is still alive here!
-    renderItemHandle_->noop();
 
     // Save window geometry at close.
     settings_->setValue( "main_window_geometry", geometry() );

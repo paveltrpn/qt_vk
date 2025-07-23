@@ -17,8 +17,10 @@ Item {
     // RenderItem instance that holds vk::Context and
     // vk::Render objects. Pointer to this object
     // available in main application.
+    //
+    // Can be accesed as "renderItemHandle.doSomeAction()"
     Render {
-        id: mainRenderItem
+        // id: mainRenderItem
     }
 
     // =====================================================
@@ -53,8 +55,8 @@ Item {
                 }
                 icon.source: "icons/exit_up.svg"
                 onClicked: {
-                    mainQuickViewHandle.noop()
-                    mainRenderItem.noop()
+                    mainWindowHandle.noop()
+                    renderItemHandle.noop()
                 }
             }
 
