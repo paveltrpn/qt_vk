@@ -34,12 +34,6 @@ Item {
     // deffered after render item fully initialized.
     Loader {
         id: mainUIComponentLoader
-        anchors {
-            // left: parent.left
-            // right: parent.right
-            // top: parent.top
-            // bottom: parent.bottom
-        }
     }
 
     // Component that holds ui itself.
