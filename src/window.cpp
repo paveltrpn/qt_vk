@@ -69,7 +69,12 @@ MainWindow::MainWindow( QQuickView *parent )
                 case QQuickView::Ready: {
                     log::info( "MainWindow === main QML component ready." );
 
-                    // Get main renderer handle from QML.
+                    // Get main renderer item handle from QML.
+                    // It istatiate only once in main.qml.
+                    //
+                    // TODO: Spawn this on c++ code and attach to
+                    // qml scene graph somehow to avoid explicit definition
+                    // of this object in main.qml
                     renderItemHandle_ = rootObject()->findChild<RenderItem *>();
                     if ( !renderItemHandle_ ) {
                         log::warning(

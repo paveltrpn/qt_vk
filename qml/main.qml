@@ -54,6 +54,7 @@ Item {
                 icon.source: "icons/exit_up.svg"
                 onClicked: {
                     mainQuickViewHandle.noop()
+                    mainRenderItem.noop()
                 }
             }
 

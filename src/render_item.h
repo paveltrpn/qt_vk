@@ -20,7 +20,7 @@ struct RenderItem : QQuickItem {
 public:
     RenderItem( QQuickItem *parent = nullptr );
 
-    auto noop() -> void { log::info( "noop from render item" ); }
+    Q_INVOKABLE void noop() { log::info( "noop from render item" ); }
 
     auto updateSurface() -> void {
         if ( context_ ) context_->querySurface();
