@@ -20,8 +20,6 @@ struct Render final {
 
     void frame( VkCommandBuffer cb, uint32_t width, uint32_t height );
 
-    void createGraphicsPipeline();
-
 private:
     // Non owning pointer to vulkan context that we
     // use to render.

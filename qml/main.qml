@@ -64,8 +64,8 @@ Item {
                 height: reloadModelsButton.height + 32
                 width: reloadModelsButton.width + closeButton.width + 32
 
-                x: 100
-                y: 100
+                x: 32
+                y: 32
 
                 radius: _radius.half
                 color: _color.background
@@ -104,11 +104,11 @@ Item {
             DragAbleItem {
                 id: vulkanInfoWidget
 
-                height: 128
                 width: 258
+                height: 128
 
-                x: 400
-                y: 100
+                x: 32
+                y: 128
                 z: parent.z
 
                 radius: _radius.half
