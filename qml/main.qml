@@ -13,7 +13,6 @@ Item {
     readonly property var _radius: Appearence.radius
     readonly property var _color: Appearence.colors
 
-    anchors.fill: parent
     // RenderItem instance that holds vk::Context and
     // vk::Render objects. Pointer to this object
     // available in main application.
@@ -76,7 +75,7 @@ Item {
                 x: 100
                 y: 100
 
-                radius: _radius.full
+                radius: _radius.half
                 color: _color.background
 
                 NpButton {
@@ -120,7 +119,7 @@ Item {
                 y: 100
                 z: parent.z
 
-                radius: _radius.full
+                radius: _radius.half
                 color: _color.background
 
                 Text {
