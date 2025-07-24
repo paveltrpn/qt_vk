@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.30)
 
-#set(CMAKE_C_COMPILER $ENV{GCC_LATEST}/bin/gcc-15.1)
-#set(CMAKE_CXX_COMPILER $ENV{GCC_LATEST}/bin/g++-15.1)
+set(CMAKE_C_COMPILER $ENV{GCC_LATEST}/bin/gcc-15.1)
+set(CMAKE_CXX_COMPILER $ENV{GCC_LATEST}/bin/g++-15.1)
 add_compile_options(-std=c++26)
 set(CMAKE_BUILD_TYPE Debug)
 
@@ -64,8 +64,6 @@ file(GLOB MOD_TIRE_SRC "src/*.cpp" "src/*.h")
 add_executable(${PROJECT_NAME} ${MOD_TIRE_SRC})
 set_target_properties(qt_vk PROPERTIES AUTOMOC TRUE)
 target_link_libraries(${PROJECT_NAME}
-    log
-    algebra
     render
     Qt::Core
     Qt::Gui
