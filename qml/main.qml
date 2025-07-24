@@ -59,9 +59,9 @@ Item {
             }
 
             DragAbleItem {
-                id: leftPanel
+                id: buttonsPanel
 
-                height: reloadModelsButton.height + 32
+                height: reloadModelsButton.height + 16
                 width: reloadModelsButton.width + closeButton.width + 32
 
                 x: 32
@@ -73,10 +73,9 @@ Item {
                 NpButton {
                     id: reloadModelsButton
                     anchors {
-                        left: leftPanel.left
+                        left: buttonsPanel.left
                         leftMargin: 8
-                        bottom: leftPanel.bottom
-                        bottomMargin: 8
+                        verticalCenter: parent.verticalCenter
                     }
                     icon.source: "icons/exit_up.svg"
                     onClicked: {
@@ -88,10 +87,9 @@ Item {
                 NpButton {
                     id: closeButton
                     anchors {
-                        right: leftPanel.right
+                        right: buttonsPanel.right
                         rightMargin: 8
-                        bottom: leftPanel.bottom
-                        bottomMargin: 8
+                        verticalCenter: parent.verticalCenter
                     }
                     icon.source: "icons/power.svg"
                     onClicked: {
