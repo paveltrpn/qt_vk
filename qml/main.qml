@@ -30,7 +30,7 @@ Item {
         }
     }
 
-    // Main ui component loading must be defferedl,
+    // Main ui component loading must be deffered,
     // it appears after render item fully initialized.
     Loader {
         id: mainUIComponentLoader

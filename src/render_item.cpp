@@ -39,6 +39,9 @@ auto RenderItem::updateWindow() -> void {
     if ( window_ ) {
         window_->update();
     }
+
+    // Or just simple use that call?
+    // update();
 }
 
 void RenderItem::beforeRendering() {
