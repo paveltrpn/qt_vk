@@ -20,7 +20,7 @@ auto RenderItem::updatePaintNode( QSGNode *node, UpdatePaintNodeData * )
     return node;
 };
 
-void RenderItem::handleWindowChanged( QQuickWindow *win ) {
+auto RenderItem::handleWindowChanged( QQuickWindow *win ) -> void {
     if ( win ) {
         connect( win, &QQuickWindow::beforeSynchronizing, this,
                  &RenderItem::sync, Qt::DirectConnection );
@@ -31,7 +31,7 @@ void RenderItem::handleWindowChanged( QQuickWindow *win ) {
     }
 }
 
-void RenderItem::cleanup() {
+auto RenderItem::cleanup() -> void {
     log::info( "RenderItem === cleanup.." );
 }
 
@@ -44,7 +44,7 @@ auto RenderItem::updateWindow() -> void {
     // update();
 }
 
-void RenderItem::beforeRendering() {
+auto RenderItem::beforeRendering() -> void {
     if ( !context_ ) {
         // Acquire vulkan resurces initialized by Qt and provided
         // by QRhi interface and window.
@@ -112,7 +112,7 @@ void RenderItem::beforeRendering() {
     }
 }
 
-void RenderItem::beforeRenderPassRecording() {
+auto RenderItem::beforeRenderPassRecording() -> void {
     window_->beginExternalCommands();
 
     // Query secondary command buffer. This must be done _after_ beginExternalCommands().
@@ -131,7 +131,7 @@ void RenderItem::beforeRenderPassRecording() {
     window_->endExternalCommands();
 }
 
-void RenderItem::sync() {
+auto RenderItem::sync() -> void {
     if ( !render_ ) {
         window_ = window();
         if ( !window_ ) {
@@ -159,7 +159,7 @@ void RenderItem::sync() {
     }
 }
 
-QString RenderItem::infoRenderDevice() {
+auto RenderItem::infoRenderDevice() -> QString {
     return QString::fromStdString( context_->getDeviceNameString() );
 }
 
