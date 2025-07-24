@@ -51,12 +51,23 @@ add_compile_definitions(ENABLE_NOTICE_OUTPUT=true)
 add_compile_definitions(ENABLE_ERROR_OUTPUT=true)
 set_target_properties(log PROPERTIES LINKER_LANGUAGE CXX)
 
+# Module mesh
+# ================================
+file(GLOB MOD_MESH_SRC "modules/mesh/*.cpp")
+add_library(mesh)
+target_sources(mesh
+  PUBLIC
+    FILE_SET CXX_MODULES FILES
+    ${MOD_MESH_SRC}
+)
+target_compile_features(mesh PUBLIC cxx_std_26)
+
 # Module render
 # ================================
 file(GLOB_RECURSE MOD_RENDER_SRC "modules/render/*.cpp" "modules/render/*.h")
 add_library(render)
 target_sources(render PRIVATE ${MOD_RENDER_SRC})
-target_link_libraries(render vulkan algebra log)
+target_link_libraries(render vulkan algebra log mesh)
 
 # The Service
 # ================================
