@@ -28,7 +28,7 @@ public:
 
     // Context proxy functions
 public:
-    Q_INVOKABLE QString infoRenderDevice();
+    Q_INVOKABLE QVariantMap infoRenderDevice();
 
     // Render proxy functions
 public:

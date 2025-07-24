@@ -105,7 +105,10 @@ Item {
                 id: vulkanInfoWidget
 
                 width: 258
-                height: 128
+                height: vulkanInfoWidgetTitle.height + vulkanInfoWidgetTitle.anchors.topMargin
+                        + deviceText.height + deviceText.anchors.topMargin
+                        + driverText.height + driverText.anchors.topMargin
+                        + apiText.height + apiText.anchors.topMargin + _gaps.half
 
                 x: 32
                 y: 128
@@ -125,27 +128,69 @@ Item {
                         right: parent.right
                     }
 
-                    height: 32
+                    padding: 0
+
                     color: "white"
                     font: _fonts.label_accent
                     text: "Vulkan info"
                 }
 
                 Text {
-                    id: device
+                    id: deviceText
 
                     anchors {
                         top: vulkanInfoWidgetTitle.bottom
-                        topMargin: _gaps.half
+                        topMargin: _gaps.quarter
                         left: parent.left
                         leftMargin: _gaps.half
                         right: parent.right
                     }
 
-                    height: 32
+                    padding: 0
+
                     color: "white"
                     font: _fonts.label
-                    text: renderItemHandle.infoRenderDevice()
+                    text: "dev: " + renderItemHandle.infoRenderDevice(
+                              )["device"]
+                    elide: Text.ElideRight
+                }
+
+                Text {
+                    id: driverText
+
+                    anchors {
+                        top: deviceText.bottom
+                        topMargin: _gaps.quarter
+                        left: parent.left
+                        leftMargin: _gaps.half
+                        right: parent.right
+                    }
+
+                    padding: 0
+
+                    color: "white"
+                    font: _fonts.label
+                    text: "drv: " + renderItemHandle.infoRenderDevice(
+                              )["driverVersion"]
+                }
+
+                Text {
+                    id: apiText
+
+                    anchors {
+                        top: driverText.bottom
+                        topMargin: _gaps.quarter
+                        left: parent.left
+                        leftMargin: _gaps.half
+                        right: parent.right
+                    }
+
+                    padding: 0
+
+                    color: "white"
+                    font: _fonts.label
+                    text: "api: " + renderItemHandle.infoRenderDevice(
+                              )["apiVersion"]
                 }
             }
         }

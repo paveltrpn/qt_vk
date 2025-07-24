@@ -27,23 +27,26 @@ Appearance::Appearance( const QDir &path, QObject *parent )
     }
 
 #define FONT_NAME "Monospace"
+#define BASE_FONT_SIZE 9
 
     // Build fonts map
-    fonts_["title_big"] = QFont{ FONT_NAME, 32, QFont::ExtraBold };
-    fonts_["title_accent"] = QFont{ FONT_NAME, 24, QFont::ExtraBold };
-    fonts_["title"] = QFont{ FONT_NAME, 24, QFont::Medium };
-    fonts_["subtitle_accent"] = QFont{ FONT_NAME, 24, QFont::ExtraBold };
-    fonts_["subtitle"] = QFont{ FONT_NAME, 24, QFont::Medium };
-    fonts_["button_accent"] = QFont{ FONT_NAME, 20, QFont::ExtraBold };
-    fonts_["button"] = QFont{ FONT_NAME, 16, QFont::ExtraBold };
-    fonts_["button_middle"] = QFont{ FONT_NAME, 16, QFont::Medium };
-    fonts_["button_middle_subtext"] = QFont{ FONT_NAME, 14, QFont::ExtraBold };
-    fonts_["text_body_accent"] = QFont{ FONT_NAME, 16, QFont::ExtraBold };
-    fonts_["text_body"] = QFont{ FONT_NAME, 16, QFont::Medium };
-    fonts_["label_accent"] = QFont{ FONT_NAME, 14, QFont::ExtraBold };
-    fonts_["label"] = QFont{ FONT_NAME, 14, QFont::Medium };
-    fonts_["subtext_accent"] = QFont{ FONT_NAME, 12, QFont::ExtraBold };
-    fonts_["subtext"] = QFont{ FONT_NAME, 12, QFont::Medium };
+    fonts_["title_big"] =
+        QFont{ FONT_NAME, BASE_FONT_SIZE + 12, QFont::ExtraBold };
+    fonts_["title_accent"] =
+        QFont{ FONT_NAME, BASE_FONT_SIZE + 8, QFont::ExtraBold };
+    fonts_["title"] = QFont{ FONT_NAME, BASE_FONT_SIZE + 8, QFont::Medium };
+    fonts_["subtitle_accent"] =
+        QFont{ FONT_NAME, BASE_FONT_SIZE + 8, QFont::ExtraBold };
+    fonts_["subtitle"] = QFont{ FONT_NAME, BASE_FONT_SIZE + 8, QFont::Medium };
+    fonts_["text_body_accent"] =
+        QFont{ FONT_NAME, BASE_FONT_SIZE + 4, QFont::ExtraBold };
+    fonts_["text_body"] = QFont{ FONT_NAME, BASE_FONT_SIZE + 4, QFont::Medium };
+    fonts_["label_accent"] =
+        QFont{ FONT_NAME, BASE_FONT_SIZE + 2, QFont::ExtraBold };
+    fonts_["label"] = QFont{ FONT_NAME, BASE_FONT_SIZE + 2, QFont::Medium };
+    fonts_["subtext_accent"] =
+        QFont{ FONT_NAME, BASE_FONT_SIZE, QFont::ExtraBold };
+    fonts_["subtext"] = QFont{ FONT_NAME, BASE_FONT_SIZE, QFont::Medium };
 
     // Build gaps map
     gaps_["quarter"] = 4;

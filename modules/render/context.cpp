@@ -85,13 +85,16 @@ auto Context::queryDeviceInfo() -> void {
             pDeviceProperties_.deviceName );
     }
 
-    // TODO: remove!!!
-    printDriverInfo();
+    log::info(
+        "vk::Context === vulkan "
+        "info:\ndev:\t{}\ndrv:\t{}\napi:\t{}",
+        getDeviceNameString(), getDeviceDriverVersionString(),
+        getApiVersionString() );
 }
 
 auto Context::querySurface() -> void {
-    if (surface_ == VK_NULL_HANDLE) {
-        log::error("Context === can not get surface handle for window!");
+    if ( surface_ == VK_NULL_HANDLE ) {
+        log::error( "Context === can not get surface handle for window!" );
     }
 
     // Physical device surface capabilities.
@@ -99,8 +102,10 @@ auto Context::querySurface() -> void {
     if ( const auto err = vkGetPhysicalDeviceSurfaceCapabilitiesKHR(
              pDevice_, surface_, &surfaceCapabilities_ );
          err != VK_SUCCESS ) {
-        log::fatal( "vk::Context === failed to obtain surface capabilities with code {}!\n",
-                    string_VkResult( err ) );
+        log::fatal(
+            "vk::Context === failed to obtain surface capabilities with code "
+            "{}!\n",
+            string_VkResult( err ) );
     } else {
         log::debug<DEBUG_OUTPUT_CONTEXT_CPP>(
             "vk::Context === physical device surface capabilities acquire "

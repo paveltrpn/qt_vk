@@ -69,19 +69,22 @@ struct Context final {
         return surfaceCapabilities_.currentExtent;
     };
 
-    // NOTE: temporary!
-    auto printDriverInfo() -> void {
-        std::println( "{} {} {} {} {} {}",
-                      VK_VERSION_MAJOR( pDeviceProperties_.driverVersion ),
-                      VK_VERSION_MINOR( pDeviceProperties_.driverVersion ),
-                      VK_VERSION_PATCH( pDeviceProperties_.driverVersion ),
-                      VK_VERSION_MAJOR( pDeviceProperties_.apiVersion ),
-                      VK_VERSION_MINOR( pDeviceProperties_.apiVersion ),
-                      VK_VERSION_PATCH( pDeviceProperties_.apiVersion ) );
+    [[nodiscard]] auto getDeviceNameString() -> std::string {
+        return pDeviceProperties_.deviceName;
     }
 
-    auto getDeviceNameString() -> std::string {
-        return pDeviceProperties_.deviceName;
+    [[nodiscard]] auto getDeviceDriverVersionString() -> std::string {
+        return std::format(
+            "{}.{}.{}", VK_VERSION_MAJOR( pDeviceProperties_.driverVersion ),
+            VK_VERSION_MINOR( pDeviceProperties_.driverVersion ),
+            VK_VERSION_PATCH( pDeviceProperties_.driverVersion ) );
+    }
+
+    [[nodiscard]] auto getApiVersionString() -> std::string {
+        return std::format( "{}.{}.{}",
+                            VK_VERSION_MAJOR( pDeviceProperties_.apiVersion ),
+                            VK_VERSION_MINOR( pDeviceProperties_.apiVersion ),
+                            VK_VERSION_PATCH( pDeviceProperties_.apiVersion ) );
     }
 
 private:

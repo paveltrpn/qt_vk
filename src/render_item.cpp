@@ -159,8 +159,15 @@ auto RenderItem::sync() -> void {
     }
 }
 
-auto RenderItem::infoRenderDevice() -> QString {
-    return QString::fromStdString( context_->getDeviceNameString() );
+auto RenderItem::infoRenderDevice() -> QVariantMap {
+    QVariantMap r;
+
+    r["device"] = QString::fromStdString( context_->getDeviceNameString() );
+    r["driverVersion"] =
+        QString::fromStdString( context_->getDeviceDriverVersionString() );
+    r["apiVersion"] = QString::fromStdString( context_->getApiVersionString() );
+
+    return r;
 }
 
 }  // namespace tire
