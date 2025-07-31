@@ -8,15 +8,16 @@ export module mesh : mesh;
 
 namespace tire {
 
-export template <typename FloatType = double>
+export template <typename FloatType = double, typename IntType = unsigned int>
 struct Mesh final {
+    using float_type = FloatType;
+    using int_type = IntType;
+
     std::vector<FloatType> vertecies_{};
-    std::vector<unsigned int> indecies_{};
+    std::vector<IntType> indecies_{};
     std::vector<FloatType> texcrds_{};
     std::vector<FloatType> normals_{};
-
-    using float_type = FloatType;
-    using int_type = decltype( indecies_ )::value_type;
+    std::vector<FloatType> colors_{};
 };
 
 }  // namespace tire

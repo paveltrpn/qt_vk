@@ -60,7 +60,6 @@ target_sources(mesh
     FILE_SET CXX_MODULES FILES
     ${MOD_MESH_SRC}
 )
-target_compile_features(mesh PUBLIC cxx_std_26)
 
 # Module render
 # ================================
