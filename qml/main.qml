@@ -103,14 +103,16 @@ Item {
             DragAbleItem {
                 id: vulkanInfoWidget
 
-                width: 258
+                width: 128 * 3
                 height: vulkanInfoWidgetTitle.height + vulkanInfoWidgetTitle.anchors.topMargin
                         + deviceText.height + deviceText.anchors.topMargin
                         + driverText.height + driverText.anchors.topMargin
                         + apiText.height + apiText.anchors.topMargin + _gaps.half
 
                 x: 32
-                y: buttonsPanel.y + buttonsPanel.height + 8
+                y: {
+                    return buttonsPanel.y + buttonsPanel.height + 8
+                }
                 z: parent.z
 
                 radius: _radius.half
@@ -196,10 +198,12 @@ Item {
             DragAbleItem {
                 id: lottieIconsBackground
                 x: 32
-                y: vulkanInfoWidget.y + vulkanInfoWidget.height + 8
+                y: {
+                    return vulkanInfoWidget.y + vulkanInfoWidget.height + 8
+                }
                 z: parent.z + 100
 
-                width: 128*3
+                width: 128 * 3
                 height: 128
 
                 radius: _radius.half
@@ -244,11 +248,13 @@ Item {
             DragAbleItem {
                 id: testLottieBackground
                 x: 32
-                y: lottieIconsBackground.y + lottieIconsBackground.height + 8
+                y: {
+                    return lottieIconsBackground.y + lottieIconsBackground.height + 8
+                }
                 z: parent.z + 100
 
-                width: 256
-                height: 256
+                width: 128 * 3
+                height: 128 * 3
 
                 radius: _radius.half
                 color: _color.background
@@ -256,14 +262,15 @@ Item {
                 LottieAnimation {
                     anchors.centerIn: parent
                     loops: 10
-                    // scale: 0.4
+                    scale: 1.3
+
                     quality: LottieAnimation.HighQuality
                     source: "../assets/lottie_animations/clock.json"
                     autoPlay: false
                     onStatusChanged: {
                         if (status === LottieAnimation.Ready) {
-                            frameRate = 24;
-                            gotoAndPlay(startFrame);
+                            frameRate = 24
+                            gotoAndPlay(startFrame)
                         }
                     }
                     onFinished: {
