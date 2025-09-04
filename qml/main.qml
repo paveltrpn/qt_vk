@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import Qt5Compat.GraphicalEffects
 import Tire 1.0
 import "components"
+import Qt.labs.lottieqt 1.0
 
 Item {
     id: mainWindow
@@ -109,7 +110,7 @@ Item {
                         + apiText.height + apiText.anchors.topMargin + _gaps.half
 
                 x: 32
-                y: 128
+                y: buttonsPanel.y + buttonsPanel.height + 8
                 z: parent.z
 
                 radius: _radius.half
@@ -189,6 +190,85 @@ Item {
                     font: _fonts.label
                     text: "api: " + renderItemHandle.infoRenderDevice(
                               )["apiVersion"]
+                }
+            }
+
+            DragAbleItem {
+                id: lottieIconsBackground
+                x: 32
+                y: vulkanInfoWidget.y + vulkanInfoWidget.height + 8
+                z: parent.z + 100
+
+                width: 128*3
+                height: 128
+
+                radius: _radius.half
+                color: _color.background
+
+                Bin {
+                    id: binIcon
+                    anchors {
+                        left: parent.left
+                        verticalCenter: parent.verticalCenter
+                        top: parent.top
+                    }
+
+                    width: 128
+                    animations.loops: Animation.Infinite
+                }
+
+                Bookmark {
+                    id: bookmarkIcon
+                    anchors {
+                        left: binIcon.right
+                        verticalCenter: parent.verticalCenter
+                        top: parent.top
+                    }
+
+                    width: 128
+                    animations.loops: Animation.Infinite
+                }
+
+                Texting {
+                    id: textingIcon
+                    anchors {
+                        left: bookmarkIcon.right
+                        verticalCenter: parent.verticalCenter
+                        top: parent.top
+                    }
+                    width: 128
+                    animations.loops: Animation.Infinite
+                }
+            }
+
+            DragAbleItem {
+                id: testLottieBackground
+                x: 32
+                y: lottieIconsBackground.y + lottieIconsBackground.height + 8
+                z: parent.z + 100
+
+                width: 256
+                height: 256
+
+                radius: _radius.half
+                color: _color.background
+
+                LottieAnimation {
+                    anchors.centerIn: parent
+                    loops: 10
+                    // scale: 0.4
+                    quality: LottieAnimation.HighQuality
+                    source: "../assets/lottie_animations/clock.json"
+                    autoPlay: false
+                    onStatusChanged: {
+                        if (status === LottieAnimation.Ready) {
+                            frameRate = 24;
+                            gotoAndPlay(startFrame);
+                        }
+                    }
+                    onFinished: {
+                        console.log("Finished playing")
+                    }
                 }
             }
         }

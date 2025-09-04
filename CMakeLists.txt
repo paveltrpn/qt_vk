@@ -10,6 +10,7 @@ project(qt_vk)
 include_directories("modules")
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS true)
+set(CMAKE_CXX_STANDARD 26)
 
 if (DEFINED ENV{VULKAN_SDK} AND NOT "$ENV{VULKAN_SDK}" STREQUAL "")
     message( "VULKAN_SDK is set to $ENV{VULKAN_SDK}")
@@ -18,7 +19,7 @@ else()
     message(SEND_ERROR "VULKAN_SDK is not set")
 endif()
 
-set(QT_VERSION 6.9)
+set(QT_VERSION 6.10)
 list(APPEND CMAKE_PREFIX_PATH $ENV{LOCAL_LATEST_QT})
 find_package(Qt6 ${QT_VERSION} COMPONENTS
     Core
